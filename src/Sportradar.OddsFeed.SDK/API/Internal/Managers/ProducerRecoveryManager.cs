@@ -311,7 +311,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Managers
             lock (_syncLock)
             {
                 ProducerRecoveryStatus? newStatus = null;
-
+                _lastRecoveryMessage = DateTime.Now;
                 try
                 {
                     if (message is odds_change || message is bet_stop)
