@@ -22,7 +22,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Sportradar.OddsFeed.SDKCore" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +31,10 @@
     <None Update="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sportradar.OddsFeed.SDK\Sportradar.OddsFeed.SDK.csproj" />
   </ItemGroup>
 
 </Project>
