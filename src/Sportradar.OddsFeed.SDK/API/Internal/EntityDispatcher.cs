@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Dawn;
+using Sportradar.OddsFeed.SDK.Api.Config;
 using Sportradar.OddsFeed.SDK.Api.EventArguments;
 using Sportradar.OddsFeed.SDK.Entities.Internal;
 using Sportradar.OddsFeed.SDK.Entities.Rest;
@@ -37,7 +38,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// Gets a value indicating whether the current <see cref="UofSession"/> is opened
         /// </summary>
         public bool IsOpened => Interlocked.Read(ref _isOpened) == 1;
-
+        
+        /// <summary>
+        /// Raised when an alive message is received
+        /// </summary>
+        public event EventHandler<AliveEventArgs> OnAlive;
+        
         /// <summary>
         /// Raised when a odds change message is received from the feed
         /// </summary>
@@ -72,6 +78,11 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// Raised when a fixture change message is received from the feed
         /// </summary>
         public event EventHandler<FixtureChangeEventArgs<T>> OnFixtureChange;
+        
+        /// <summary>
+        /// Raised when snapshot_complete message is received
+        /// </summary>
+        public event EventHandler<SnapshotCompleteEventArgs> OnSnapshotComplete;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityDispatcher{T}"/> class
@@ -92,8 +103,14 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// </summary>
         /// <param name="message"></param>
         /// <param name="rawMessage"></param>
-        public virtual void Dispatch(FeedMessage message, byte[] rawMessage)
+        public virtual void Dispatch(FeedMessage message, byte[] rawMessage, MessageInterest interest)
         {
+            if (message is alive alive)
+            {
+                DispatchAlive(alive, rawMessage);
+                return;
+            }
+            
             if (message is odds_change oddsChange)
             {
                 DispatchOddsChange(oddsChange, rawMessage);
@@ -135,9 +152,27 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
                 DispatchFixtureChange(fixtureChange, rawMessage);
                 return;
             }
+
+            if (message is snapshot_complete snapshotComplete)
+            {
+                DispatchSnapshotComplete(snapshotComplete, rawMessage, interest);
+                return;
+            }
+            
             throw new ArgumentException($"FeedMessage of type '{message.GetType().Name}' is not supported.");
         }
-
+        
+        /// <summary>
+        /// Dispatches the <see cref="alive"/> message
+        /// </summary>
+        /// <param name="message">The <see cref="alive"/> message to dispatch</param>
+        /// <param name="rawMessage">A raw message received from the feed</param>
+        private void DispatchAlive(alive message, byte[] rawMessage)
+        {
+            var eventArgs = new AliveEventArgs(MessageMapper, message, rawMessage);
+            Dispatch(OnAlive, eventArgs, message);
+        }
+        
         /// <summary>
         /// Dispatches the <see cref="odds_change"/> message
         /// </summary>
@@ -213,6 +248,18 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         {
             var eventArgs = new FixtureChangeEventArgs<T>(MessageMapper, message, DefaultCultures, rawMessage);
             Dispatch(OnFixtureChange, eventArgs, message);
+        }
+        
+        /// <summary>
+        /// Dispatches the <see cref="snapshot_complete"/> message
+        /// </summary>
+        /// <param name="message">The <see cref="snapshot_complete"/> message to dispatch</param>
+        /// <param name="rawMessage">A raw message received from the feed</param>
+        /// <param name="interest">Message Interest</param>
+        private void DispatchSnapshotComplete(snapshot_complete message, byte[] rawMessage, MessageInterest interest)
+        {
+            var eventArgs = new SnapshotCompleteEventArgs(MessageMapper, message, interest, rawMessage);
+            Dispatch(OnSnapshotComplete, eventArgs, message);
         }
 
         /// <summary>

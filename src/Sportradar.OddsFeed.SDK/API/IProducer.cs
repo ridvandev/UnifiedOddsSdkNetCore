@@ -81,5 +81,10 @@ namespace Sportradar.OddsFeed.SDK.Api
         /// </summary>
         /// <value>The scope</value>
         IReadOnlyCollection<string> Scope { get; }
+        
+        /// <summary>
+        /// Get full name of the runtime file to store internals
+        /// </summary>
+        string RuntimeFileName { get; }
     }
 }

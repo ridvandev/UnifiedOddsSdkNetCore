@@ -4,7 +4,7 @@ using Sportradar.OddsFeed.SDK.Common.Enums;
 
 namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
 {
-    internal interface IUofConfigurationSection
+    public interface IUofConfigurationSection
     {
         /// <summary>
         /// Gets the access token
@@ -84,5 +84,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
         /// </summary>
         /// <remarks>Dependent on the other configuration, it may set MQ and API host address and port</remarks>
         SdkEnvironment Environment { get; }
+        
+        /// <summary>
+        /// Gets runtime path to store internal data
+        /// </summary>
+        string RuntimePath { get; }
     }
 }

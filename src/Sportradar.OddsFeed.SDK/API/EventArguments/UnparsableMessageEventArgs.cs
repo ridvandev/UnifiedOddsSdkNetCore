@@ -35,18 +35,25 @@ namespace Sportradar.OddsFeed.SDK.Api.EventArguments
         private readonly byte[] _rawMessage;
 
         /// <summary>
+        /// routingKey
+        /// </summary>
+        private readonly string _routingKey;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UnparsableMessageEventArgs"/> class
         /// </summary>
         /// <param name="messageType">The <see cref="MessageType"/> member specifying the type of the unparsable message.</param>
         /// <param name="producer">The <see cref="string"/> representation of the producer associated with the unparsable message.</param>
         /// <param name="eventId">The <see cref="string"/> representation of the sport event id associated with the unparsable message.</param>
         /// <param name="rawMessage">A raw message received from the feed</param>
-        public UnparsableMessageEventArgs(MessageType messageType, string producer, string eventId, byte[] rawMessage)
+        /// <param name="routingKey">routingKey</param>
+        public UnparsableMessageEventArgs(MessageType messageType, string producer, string eventId, byte[] rawMessage, string routingKey)
         {
             MessageType = messageType;
             Producer = producer;
             EventId = eventId;
             _rawMessage = rawMessage;
+            _routingKey = routingKey;
         }
 
         /// <summary>
@@ -58,6 +65,15 @@ namespace Sportradar.OddsFeed.SDK.Api.EventArguments
             return _rawMessage == null
                 ? null
                 : Encoding.UTF8.GetString(_rawMessage);
+        }
+
+        /// <summary>
+        /// routingKey
+        /// </summary>
+        /// <returns>Routing key</returns>
+        public string GetRoutingKey()
+        {
+            return _routingKey;
         }
     }
 }

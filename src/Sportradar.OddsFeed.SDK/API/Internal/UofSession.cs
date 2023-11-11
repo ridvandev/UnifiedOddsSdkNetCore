@@ -131,7 +131,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
                 case ValidationResult.Failure:
                     ExecutionLog.LogWarning("{MessageInterest}Validation of message=[{FeedMessage}] failed. Raising OnUnparsableMessageReceived event", WriteMessageInterest(), message);
                     var messageType = _messageDataExtractor.GetMessageTypeFromMessage(message);
-                    var eventArgs = new UnparsableMessageEventArgs(messageType, message.ProducerId.ToString(), message.EventId, e.RawMessage);
+                    var eventArgs = new UnparsableMessageEventArgs(messageType, message.ProducerId.ToString(), message.EventId, e.RawMessage, message.RoutingKey);
                     Dispatch(OnUnparsableMessageReceived, eventArgs, "OnUnparsableMessageReceived", message.ProducerId);
                     return;
                 case ValidationResult.ProblemsDetected:
@@ -156,7 +156,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             var rawData = eventArgs.RawData as byte[] ?? eventArgs.RawData.ToArray();
             var basicMessageData = _messageDataExtractor.GetBasicMessageData(rawData);
             ExecutionLog.LogInformation("{MessageInterest}Extracted the following data from unparsed message data: [{FeedMessage}], raising OnUnparsableMessageReceived event", WriteMessageInterest(), basicMessageData);
-            var dispatchEventArgs = new UnparsableMessageEventArgs(basicMessageData.MessageType, basicMessageData.ProducerId, basicMessageData.EventId, rawData);
+            var dispatchEventArgs = new UnparsableMessageEventArgs(basicMessageData.MessageType, basicMessageData.ProducerId, basicMessageData.EventId, rawData, eventArgs.RoutingKey);
             var producerId = 0;
             if (!string.IsNullOrEmpty(basicMessageData.ProducerId))
             {
@@ -181,7 +181,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             }
             ExecutionLog.LogDebug("{MessageInterest}Dispatching {MessageType} for {EventId} ({GeneratedAt}).{Elapsed}", WriteMessageInterest(), e.Message.GetType().Name, e.Message.EventId, e.Message.GeneratedAt, processingTook);
             var dispatcher = SelectDispatcher(e.Message);
-            dispatcher.Dispatch(e.Message, e.RawMessage);
+            dispatcher.Dispatch(e.Message, e.RawMessage, MessageInterest);
         }
 
         /// <summary>
@@ -209,24 +209,18 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// </summary>
         /// <param name="message"></param>
         /// <param name="rawMessage"></param>
-        public override void Dispatch(FeedMessage message, byte[] rawMessage)
+        public override void Dispatch(FeedMessage message, byte[] rawMessage, MessageInterest interest)
         {
             Guard.Argument(message, nameof(message)).NotNull();
 
-            if (message is alive)
-            {
-                //ProcessAlive(alive);
-                return;
-            }
+            // if (message is snapshot_complete)
+            // {
+            //     //ProcessSnapshotComplete(snapShotComplete);
+            //     //DispatchProducerUp(MessageMapperHelper.GetEnumValue<Product>(snapShotComplete.producer), snapShotComplete.timestamp);
+            //     return;
+            // }
 
-            if (message is snapshot_complete)
-            {
-                //ProcessSnapshotComplete(snapShotComplete);
-                //DispatchProducerUp(MessageMapperHelper.GetEnumValue<Product>(snapShotComplete.producer), snapShotComplete.timestamp);
-                return;
-            }
-
-            base.Dispatch(message, rawMessage);
+            base.Dispatch(message, rawMessage, MessageInterest);
         }
 
         /// <summary>

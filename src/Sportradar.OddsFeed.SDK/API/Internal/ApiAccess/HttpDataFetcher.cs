@@ -43,6 +43,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
 
         private readonly IDeserializer<response> _responseDeserializer;
 
+        private readonly SemaphoreSlim _connectionLimiter;
+
         /// <summary>
         /// Gets the response headers
         /// </summary>
@@ -58,10 +60,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
         /// <param name="connectionFailureTimeout">indicates the timeout after which comes out of "blocking mode" (in seconds)</param>
         /// <param name="saveResponseHeader">Indicates if the response header should be obtained</param>
         public HttpDataFetcher(ISdkHttpClient sdkHttpClient,
-                               IDeserializer<response> responseDeserializer,
-                               int connectionFailureLimit = 5,
-                               int connectionFailureTimeout = 15,
-                               bool saveResponseHeader = true)
+            IDeserializer<response> responseDeserializer,
+            int connectionFailureLimit = int.MaxValue,
+            int connectionFailureTimeout = 5,
+            bool saveResponseHeader = true)
         {
             Guard.Argument(sdkHttpClient, nameof(sdkHttpClient)).NotNull();
             Guard.Argument(sdkHttpClient.DefaultRequestHeaders, nameof(sdkHttpClient.DefaultRequestHeaders)).NotNull();
@@ -75,6 +77,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
             _blockingModeActive = false;
             _responseDeserializer = responseDeserializer;
             _saveResponseHeaders = saveResponseHeader;
+            _connectionLimiter = new SemaphoreSlim(initialCount: 1000, maxCount: 1000);
         }
 
         /// <summary>
@@ -89,6 +92,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
             HttpResponseMessage responseMessage = null;
             try
             {
+                await _connectionLimiter.WaitAsync();
                 responseMessage = await SdkHttpClient.GetAsync(uri).ConfigureAwait(false);
                 return await ProcessGetDataAsync(responseMessage, uri).ConfigureAwait(false);
             }
@@ -107,6 +111,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
                 RecordFailure();
                 throw new CommunicationException("Failed to execute http get", uri.ToString(), responseMessage?.StatusCode ?? HttpStatusCode.OK, ex);
             }
+            finally
+            {
+                _connectionLimiter.Release();
+            }
         }
 
         /// <summary>
@@ -120,7 +128,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
             return GetDataAsync(uri).GetAwaiter().GetResult();
         }
 
-        [SuppressMessage("Roslynator", "RCS1075:Avoid empty catch clause that catches System.Exception.", Justification = "Ignore all deserialization issues")]
+        [SuppressMessage("Roslynator", "RCS1075:Avoid empty catch clause that catches System.Exception.",
+            Justification = "Ignore all deserialization issues")]
         private async Task<Stream> ProcessGetDataAsync(HttpResponseMessage responseMessage, Uri uri)
         {
             if (!responseMessage.IsSuccessStatusCode)
@@ -136,9 +145,14 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
                 }
                 catch (Exception ex)
                 {
-                    throw new CommunicationException($"Response StatusCode={responseMessage.StatusCode} does not indicate success. Msg={responseContent}", uri.ToString(), responseMessage.StatusCode, responseContent, ex);
+                    throw new CommunicationException(
+                        $"Response StatusCode={responseMessage.StatusCode} does not indicate success. Msg={responseContent}",
+                        uri.ToString(), responseMessage.StatusCode, responseContent, ex);
                 }
-                throw new CommunicationException($"Response StatusCode={responseMessage.StatusCode} does not indicate success. Msg={responseContent}", uri.ToString(), responseMessage.StatusCode, responseContent, null);
+
+                throw new CommunicationException(
+                    $"Response StatusCode={responseMessage.StatusCode} does not indicate success. Msg={responseContent}",
+                    uri.ToString(), responseMessage.StatusCode, responseContent, null);
             }
 
             RecordSuccess();
@@ -149,13 +163,16 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
                 {
                     responseHeaders.Add(header.Key, header.Value);
                 }
+
                 ResponseHeaders = responseHeaders;
             }
 
             if (responseMessage.Content.GetType().Name == "EmptyContent")
             {
-                throw new CommunicationException("Missing content in the response", uri.ToString(), responseMessage.StatusCode, null);
+                throw new CommunicationException("Missing content in the response", uri.ToString(),
+                    responseMessage.StatusCode, null);
             }
+
             return await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
         }
 
@@ -183,7 +200,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await SdkHttpClient.PostAsync(uri, content ?? new StringContent(string.Empty)).ConfigureAwait(false);
+                responseMessage = await SdkHttpClient.PostAsync(uri, content ?? new StringContent(string.Empty))
+                    .ConfigureAwait(false);
 
                 RecordSuccess();
                 if (_saveResponseHeaders)
@@ -193,8 +211,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
                     {
                         responseHeaders.Add(header.Key, header.Value);
                     }
+
                     ResponseHeaders = responseHeaders;
                 }
+
                 return responseMessage;
             }
             catch (CommunicationException)

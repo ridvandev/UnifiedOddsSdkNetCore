@@ -35,7 +35,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
         /// <param name="logger">Logger to log rest requests</param>
         /// <param name="connectionFailureLimit">Indicates the limit of consecutive request failures, after which it goes in "blocking mode"</param>
         /// <param name="connectionFailureTimeout">indicates the timeout after which comes out of "blocking mode" (in seconds)</param>
-        public LogHttpDataFetcher(ISdkHttpClient sdkHttpClient, ISequenceGenerator sequenceGenerator, IDeserializer<response> responseDeserializer, ILogger logger, int connectionFailureLimit = 50, int connectionFailureTimeout = 15)
+        public LogHttpDataFetcher(ISdkHttpClient sdkHttpClient, ISequenceGenerator sequenceGenerator, IDeserializer<response> responseDeserializer, ILogger logger, int connectionFailureLimit = int.MaxValue, int connectionFailureTimeout = 5)
             : base(sdkHttpClient, responseDeserializer, connectionFailureLimit, connectionFailureTimeout)
         {
             Guard.Argument(sequenceGenerator, nameof(sequenceGenerator)).NotNull();

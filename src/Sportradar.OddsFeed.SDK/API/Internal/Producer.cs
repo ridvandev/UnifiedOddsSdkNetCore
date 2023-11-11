@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Dawn;
 using Microsoft.Extensions.Logging;
@@ -98,6 +99,11 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         public IReadOnlyCollection<string> Scope { get; }
 
         /// <summary>
+        /// Get full name of the runtime file to store internals
+        /// </summary>
+        public string RuntimeFileName { get; internal set; }
+
+        /// <summary>
         /// Gets the recovery info about last recovery attempt
         /// </summary>
         /// <value>The recovery info about last recovery attempt</value>
@@ -120,8 +126,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// <param name="maxRecoveryTime">The maximum time in seconds in which recovery must be completed</param>
         /// <param name="scope">The scope of the producer</param>
         /// <param name="statefulRecoveryWindowInMinutes">The stateful recovery window in minutes</param>
-        [SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "Allowed here")]
-        public Producer(int id, string name, string description, string apiUrl, bool active, int maxInactivitySeconds, int maxRecoveryTime, string scope, int statefulRecoveryWindowInMinutes)
+        [SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters",
+            Justification = "Allowed here")]
+        public Producer(int id, string name, string description, string apiUrl, bool active, int maxInactivitySeconds,
+            int maxRecoveryTime, string scope, int statefulRecoveryWindowInMinutes)
         {
             Guard.Argument(id).Positive();
             Guard.Argument(name, nameof(name)).NotNull().NotEmpty();
@@ -141,7 +149,9 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
 
             if (!string.IsNullOrEmpty(apiUrl))
             {
-                var tmp = ApiUrl.EndsWith("/", StringComparison.InvariantCultureIgnoreCase) ? ApiUrl.Remove(apiUrl.Length - 1) : ApiUrl;
+                var tmp = ApiUrl.EndsWith("/", StringComparison.InvariantCultureIgnoreCase)
+                    ? ApiUrl.Remove(apiUrl.Length - 1)
+                    : ApiUrl;
                 Code = tmp.Split('/').Last();
             }
 
@@ -181,11 +191,22 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             if (timestamp >= LastTimestampBeforeDisconnect)
             {
                 LastTimestampBeforeDisconnect = timestamp;
+                if (!string.IsNullOrEmpty(RuntimeFileName))
+                {
+                    if (!File.Exists(RuntimeFileName))
+                    {
+                        File.Create(RuntimeFileName);
+                    }
+
+                    File.SetLastWriteTime(RuntimeFileName, timestamp);
+                }
             }
             else if (timestamp < LastTimestampBeforeDisconnect.AddSeconds(-MaxInactivitySeconds))
             {
                 var logger = SdkLoggerFactory.GetLoggerForExecution(typeof(Producer));
-                logger.LogWarning("Suspicious feed message timestamp arrived for producer {ProducerId}. Current={LastTimestampBeforeDisconnect}. Arrived={FeedMessageTimestamp}", Id, LastTimestampBeforeDisconnect, timestamp);
+                logger.LogWarning(
+                    "Suspicious feed message timestamp arrived for producer {ProducerId}. Current={LastTimestampBeforeDisconnect}. Arrived={FeedMessageTimestamp}",
+                    Id, LastTimestampBeforeDisconnect, timestamp);
             }
         }
 
@@ -195,7 +216,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// <returns>A <see cref="string" /> that represents this instance</returns>
         public override string ToString()
         {
-            return $"{Id}({Name}):[IsUp={!IsProducerDown},Timestamp={LastTimestampBeforeDisconnect:dd.MM.yyyy-HH:mm:ss.fff}]";
+            return
+                $"{Id}({Name}):[IsUp={!IsProducerDown},Timestamp={LastTimestampBeforeDisconnect:dd.MM.yyyy-HH:mm:ss.fff}]";
         }
 
         public string ToString(string format, IFormatProvider formatProvider = null)
@@ -205,6 +227,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             {
                 format = "c";
             }
+
             format = format.ToLowerInvariant();
 
             if (formatProvider?.GetFormat(GetType()) is ICustomFormatter formatter)
@@ -217,11 +240,13 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
                 case "c":
                     return $"{Id}-{Name}";
                 case "f":
-                    return $"{Id}({Name}):[IsUp={!IsProducerDown},Timestamp={LastTimestampBeforeDisconnect:dd.MM.yyyy-HH:mm:ss.fff}]";
+                    return
+                        $"{Id}({Name}):[IsUp={!IsProducerDown},Timestamp={LastTimestampBeforeDisconnect:dd.MM.yyyy-HH:mm:ss.fff}]";
                 case "i":
                     return Id.ToString();
                 default:
-                    return $"{Id}({Name}):[IsUp={!IsProducerDown},Timestamp={LastTimestampBeforeDisconnect:dd.MM.yyyy-HH:mm:ss.fff}]";
+                    return
+                        $"{Id}({Name}):[IsUp={!IsProducerDown},Timestamp={LastTimestampBeforeDisconnect:dd.MM.yyyy-HH:mm:ss.fff}]";
             }
         }
 
@@ -236,6 +261,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             {
                 return false;
             }
+
             return Equals(producer);
         }
 
@@ -250,6 +276,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             {
                 return false;
             }
+
             return Id == other.Id && string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
