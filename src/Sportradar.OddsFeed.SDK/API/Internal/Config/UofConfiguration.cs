@@ -19,7 +19,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
     /// Represents SDK configuration
     /// </summary>
     [SuppressMessage("ReSharper", "TooManyChainedReferences")]
-    internal class UofConfiguration : IUofConfiguration
+    public class UofConfiguration : IUofConfiguration
     {
         private readonly IUofConfigurationSectionProvider _uofConfigurationSectionProvider;
 
