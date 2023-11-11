@@ -60,3 +60,5 @@ coverage.xml
 # dotCover output
 dotCover.Output.*
 /dotCover.Output
+
+.DS_Store

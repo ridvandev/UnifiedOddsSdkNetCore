@@ -19,7 +19,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
     /// Represents SDK configuration
     /// </summary>
     [SuppressMessage("ReSharper", "TooManyChainedReferences")]
-    internal class UofConfiguration : IUofConfiguration
+    public class UofConfiguration : IUofConfiguration
     {
         private readonly IUofConfigurationSectionProvider _uofConfigurationSectionProvider;
 
@@ -32,6 +32,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
         public IUofProducerConfiguration Producer { get; internal set; }
         public IUofCacheConfiguration Cache { get; internal set; }
         public IUofAdditionalConfiguration Additional { get; internal set; }
+        public string RuntimePath { get; internal set; }
         public int NodeId { get; internal set; }
         public SdkEnvironment Environment { get; internal set; }
         public ExceptionHandlingStrategy ExceptionHandlingStrategy { get; internal set; }
@@ -134,6 +135,11 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
             if (section.NodeId > 0)
             {
                 NodeId = section.NodeId;
+            }
+
+            if (!string.IsNullOrEmpty(section.RuntimePath))
+            {
+                RuntimePath = section.RuntimePath;
             }
 
             ExceptionHandlingStrategy = section.ExceptionHandlingStrategy;

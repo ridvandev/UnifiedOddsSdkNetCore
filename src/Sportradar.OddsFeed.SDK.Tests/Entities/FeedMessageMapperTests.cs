@@ -1,5 +1,6 @@
 ﻿// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -65,7 +66,7 @@ public class FeedMessageMapperTests
         var message = _deserializer.Deserialize<alive>(stream);
         TestData.FillMessageTimestamp(message);
         _validator.Validate(message);
-        var entity = _mapper.MapAlive(message);
+        var entity = _mapper.MapAlive(message, Array.Empty<byte>());
         Assert.NotNull(entity);
     }
 

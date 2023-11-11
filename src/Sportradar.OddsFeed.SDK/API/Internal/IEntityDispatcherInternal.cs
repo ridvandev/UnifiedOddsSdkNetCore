@@ -1,5 +1,6 @@
-﻿// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
+// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
 
+using Sportradar.OddsFeed.SDK.Api.Config;
 using Sportradar.OddsFeed.SDK.Common;
 using Sportradar.OddsFeed.SDK.Messages.Feed;
 
@@ -15,6 +16,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// </summary>
         /// <param name="message">A <see cref="FeedMessage"/> to dispatch.</param>
         /// <param name="rawMessage">A raw message received from the feed</param>
-        void Dispatch(FeedMessage message, byte[] rawMessage);
+        /// <param name="interest">Message interest</param>
+        void Dispatch(FeedMessage message, byte[] rawMessage, MessageInterest interest);
     }
 }

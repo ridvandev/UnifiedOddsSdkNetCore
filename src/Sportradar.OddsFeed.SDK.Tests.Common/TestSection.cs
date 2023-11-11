@@ -24,6 +24,7 @@ public class TestSection : IUofConfigurationSection
     public string DisabledProducers { get; set; }
     public int NodeId { get; set; }
     public SdkEnvironment Environment { get; set; }
+    public string RuntimePath { get; set; }
 
     public TestSection(string accessToken,
         string host,
