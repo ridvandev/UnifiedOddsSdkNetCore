@@ -4,6 +4,7 @@
 using System;
 using Dawn;
 using Sportradar.OddsFeed.SDK.Api.Config;
+using Sportradar.OddsFeed.SDK.Common.Enums;
 
 namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
 {
@@ -11,7 +12,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
     /// Class TokenSetter
     /// </summary>
     /// <seealso cref="ITokenSetter" />
-    internal class TokenSetter : ITokenSetter
+    public class TokenSetter : ITokenSetter
     {
         /// <summary>
         /// A <see cref="IUofConfigurationSectionProvider"/> instance used to access <see cref="IUofConfigurationSection"/>
@@ -29,7 +30,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
         /// <param name="uofConfigurationSectionProvider">A <see cref="IUofConfigurationSectionProvider"/> instance used to access <see cref="IUofConfigurationSection"/></param>
         /// <param name="bookmakerDetailsProvider">Provider for bookmaker details</param>
         /// <param name="producersProvider">Provider for available producers</param>
-        internal TokenSetter(IUofConfigurationSectionProvider uofConfigurationSectionProvider, IBookmakerDetailsProvider bookmakerDetailsProvider, IProducersProvider producersProvider)
+        public TokenSetter(IUofConfigurationSectionProvider uofConfigurationSectionProvider, IBookmakerDetailsProvider bookmakerDetailsProvider, IProducersProvider producersProvider)
         {
             Guard.Argument(uofConfigurationSectionProvider, nameof(uofConfigurationSectionProvider)).NotNull();
 
@@ -74,6 +75,14 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
         {
             _configuration.UpdateFromAppConfigSection(true);
 
+            if (_configuration.Environment == SdkEnvironment.Custom)
+            {
+                var builder = new EnvironmentSelector(_configuration, _uofConfigurationSectionProvider, _bookmakerDetailsProvider, _producersProvider)
+                    .SelectCustom();
+
+                return builder.LoadFromConfigFile().Build();
+            }
+            
             return new EnvironmentSelector(_configuration, _uofConfigurationSectionProvider, _bookmakerDetailsProvider, _producersProvider)
                 .SelectEnvironment(_configuration.Environment)
                 .Build();

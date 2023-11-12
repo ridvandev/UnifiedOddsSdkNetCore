@@ -2,7 +2,7 @@
 
 namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
 {
-    internal interface IBookmakerDetailsProvider
+    public interface IBookmakerDetailsProvider
     {
         /// <summary>
         /// Loads the current config object with bookmaker details data retrieved from the Sports API

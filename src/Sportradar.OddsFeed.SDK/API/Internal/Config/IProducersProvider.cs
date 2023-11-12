@@ -9,7 +9,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
     /// <summary>
     /// Defines a type used to retrieve available producers on api
     /// </summary>
-    internal interface IProducersProvider
+    public interface IProducersProvider
     {
         /// <summary>
         /// Gets the available producers from api
