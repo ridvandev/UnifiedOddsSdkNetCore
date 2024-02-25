@@ -28,5 +28,11 @@ namespace Sportradar.OddsFeed.SDK.Entities
         /// </summary>
         /// <value>The raw message</value>
         byte[] RawMessage { get; }
+        
+        /// <summary>
+        /// routingKey
+        /// </summary>
+        /// <value>routingKey</value>
+        string RoutingKey { get; }
     }
 }

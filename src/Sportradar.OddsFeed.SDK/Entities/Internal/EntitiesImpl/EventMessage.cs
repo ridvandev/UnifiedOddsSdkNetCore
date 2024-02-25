@@ -20,7 +20,8 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="sportEvent">An <see cref="ISportEvent" /> derived instance representing the sport event associated with the current <see cref="EventMessage{T}" /></param>
         /// <param name="requestId">The id of the request which triggered the current <see cref="EventMessage{T}" /> message or a null reference</param>
         /// <param name="rawMessage">The raw message </param>
-        protected EventMessage(IMessageTimestamp timestamp, IProducer producer, T sportEvent, long? requestId, byte[] rawMessage)
+        /// <param name="routingKey">routingKey</param>
+        protected EventMessage(IMessageTimestamp timestamp, IProducer producer, T sportEvent, long? requestId, byte[] rawMessage, string routingKey)
             : base(timestamp, producer)
         {
             Guard.Argument(sportEvent, nameof(sportEvent)).Require(sportEvent != null);
@@ -28,6 +29,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
             Event = sportEvent;
             RequestId = requestId;
             RawMessage = rawMessage;
+            RoutingKey = routingKey;
         }
 
         /// <summary>
@@ -45,5 +47,11 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// </summary>
         /// <value>The raw message received from the broker</value>
         public byte[] RawMessage { get; }
+
+        /// <summary>
+        /// routingKey
+        /// </summary>
+        /// <value>routingKey from the broker</value>
+        public string RoutingKey { get; }
     }
 }
