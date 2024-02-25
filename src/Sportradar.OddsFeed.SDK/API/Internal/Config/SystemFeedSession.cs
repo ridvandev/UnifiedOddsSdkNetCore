@@ -125,7 +125,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
                         _log.LogError(ex, $"An error occurred while determining the MessageType of the message whose validation has failed. Message={message}");
                         return;
                     }
-                    var eventArgs = new UnparsableMessageEventArgs(messageType, message.ProducerId.ToString(), message.EventId, e.RawMessage);
+                    var eventArgs = new UnparsableMessageEventArgs(messageType, message.ProducerId.ToString(), message.EventId, e.RawMessage, message.RoutingKey);
                     Dispatch(UnparsableMessageReceived, eventArgs, "OnUnparsableMessageReceived");
                     return;
                 case ValidationResult.ProblemsDetected:
@@ -151,7 +151,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
             var rawData = eventArgs.RawData as byte[] ?? eventArgs.RawData.ToArray();
             var basicMessageData = _messageDataExtractor.GetBasicMessageData(rawData);
             _log.LogInformation($"Extracted the following data from unparsed message data: [{basicMessageData}], raising OnUnparsableMessageReceived event");
-            var dispatchmentEventArgs = new UnparsableMessageEventArgs(basicMessageData.MessageType, basicMessageData.ProducerId, basicMessageData.EventId, rawData);
+            var dispatchmentEventArgs = new UnparsableMessageEventArgs(basicMessageData.MessageType, basicMessageData.ProducerId, basicMessageData.EventId, rawData, eventArgs.RoutingKey);
             Dispatch(UnparsableMessageReceived, dispatchmentEventArgs, "OnUnparsableMessageReceived");
         }
 

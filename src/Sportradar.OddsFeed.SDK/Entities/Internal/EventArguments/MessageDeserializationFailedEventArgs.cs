@@ -18,15 +18,19 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EventArguments
         /// </summary>
         public IEnumerable<byte> RawData { get; }
 
+        public string RoutingKey { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageDeserializationFailedEventArgs"/> class
         /// </summary>
         /// <param name="rawData">the name of the message which could not be deserialized, or a null reference if message name could not be retrieved</param>
-        internal MessageDeserializationFailedEventArgs(ICollection<byte> rawData)
+        /// <param name="routingKey">routingKey</param>
+        internal MessageDeserializationFailedEventArgs(ICollection<byte> rawData, string routingKey)
         {
             Guard.Argument(rawData, nameof(rawData)).NotNull().NotEmpty();
 
             RawData = rawData;
+            RoutingKey = routingKey;
         }
     }
 }

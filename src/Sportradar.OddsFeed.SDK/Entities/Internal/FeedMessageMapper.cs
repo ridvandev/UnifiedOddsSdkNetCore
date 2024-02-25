@@ -476,7 +476,8 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                         MessageMapperHelper.GetEnumValue(message.change_typeSpecified, message.change_type, FixtureChangeType.Other, FixtureChangeType.NotAvailable),
                                         message.next_live_timeSpecified ? (long?)message.next_live_time : null,
                                         message.start_time,
-                                        rawMessage);
+                                        rawMessage,
+                                        message.RoutingKey);
         }
 
         /// <summary>
@@ -499,7 +500,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                   message.request_idSpecified ? (long?)message.request_id : null,
                                   MessageMapperHelper.GetEnumValue(message.market_statusSpecified, message.market_status, MarketStatus.Suspended),
                                   message.groups?.Split('|'),
-                                  rawMessage);
+                                  rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -524,7 +525,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                     string.IsNullOrEmpty(message.superceded_by) ? null : Urn.Parse(message.superceded_by),
                                     message.market.Select(m => GetMarketCancel(GetEventForNameProvider<T>(Urn.Parse(message.event_id), message.SportId, culturesList),
                                                                               m, message.ProducerId, message.SportId, culturesList)),
-                                    rawMessage);
+                                    rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -549,7 +550,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                             message.end_timeSpecified ? (long?)message.end_time : null,
                                             message.market.Select(m => GetMarketCancel(GetEventForNameProvider<T>(Urn.Parse(message.event_id), message.SportId, culturesList),
                                                                                       m, message.ProducerId, message.SportId, culturesList)),
-                                            rawMessage);
+                                            rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -572,7 +573,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                  message.outcomes.Select(m => GetMarketWithResults(GetEventForNameProvider<T>(Urn.Parse(message.event_id), message.SportId, culturesList),
                                                                                   m, message.ProducerId, message.SportId, culturesList)),
                                  message.certainty,
-                                 rawMessage);
+                                 rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -593,7 +594,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                 GetEventForMessage<T>(Urn.Parse(message.event_id), message.SportId, culturesList),
                 message.request_idSpecified ? (long?)message.request_id : null,
                 message.market.Select(m => GetMarketCancel(GetEventForNameProvider<T>(Urn.Parse(message.event_id), message.SportId, culturesList), m, message.ProducerId, message.SportId, culturesList)),
-                rawMessage);
+                rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -621,7 +622,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                 markets,
                 message.odds_generation_properties,
                 _namedValuesProvider,
-                rawMessage);
+                rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -649,7 +650,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                 message.odds?.betting_statusSpecified == true ? (int?)message.odds.betting_status : null,
                 message.odds?.market?.Select(m => GetMarketWithProbabilities(GetEventForNameProvider<T>(eventId, sportId, culturesList), m, message.product, sportId, culturesList)).ToList(),
                 _namedValuesProvider,
-                rawMessage);
+                rawMessage, message.RoutingKey);
         }
     }
 }

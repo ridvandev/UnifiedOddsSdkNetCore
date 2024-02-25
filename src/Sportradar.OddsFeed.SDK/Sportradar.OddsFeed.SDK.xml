@@ -1412,7 +1412,12 @@
             The raw message
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Api.EventArguments.UnparsableMessageEventArgs.#ctor(Sportradar.OddsFeed.SDK.Common.Enums.MessageType,System.String,System.String,System.Byte[])">
+        <member name="F:Sportradar.OddsFeed.SDK.Api.EventArguments.UnparsableMessageEventArgs._routingKey">
+            <summary>
+            routingKey
+            </summary>
+        </member>
+        <member name="M:Sportradar.OddsFeed.SDK.Api.EventArguments.UnparsableMessageEventArgs.#ctor(Sportradar.OddsFeed.SDK.Common.Enums.MessageType,System.String,System.String,System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Api.EventArguments.UnparsableMessageEventArgs"/> class
             </summary>
@@ -1420,12 +1425,19 @@
             <param name="producer">The <see cref="T:System.String"/> representation of the producer associated with the unparsable message.</param>
             <param name="eventId">The <see cref="T:System.String"/> representation of the sport event id associated with the unparsable message.</param>
             <param name="rawMessage">A raw message received from the feed</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.EventArguments.UnparsableMessageEventArgs.GetRawMessage">
             <summary>
             Gets the raw XML message received from the feed
             </summary>
             <returns>Returns the raw XML message received from the feed</returns>
+        </member>
+        <member name="M:Sportradar.OddsFeed.SDK.Api.EventArguments.UnparsableMessageEventArgs.GetRoutingKey">
+            <summary>
+            routingKey
+            </summary>
+            <returns>Routing key</returns>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Api.Extended.IUofSdkExtended">
             <summary>
@@ -5282,11 +5294,12 @@
             <param name="sender">The <see cref="T:System.Object"/> representation of the event sender</param>
             <param name="eventArgs">A <see cref="T:RabbitMQ.Client.Events.BasicDeliverEventArgs"/> containing event information</param>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess.RabbitMqMessageReceiver.RaiseDeserializationFailed(System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess.RabbitMqMessageReceiver.RaiseDeserializationFailed(System.Byte[],System.String)">
             <summary>
             Raises the <see cref="E:Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess.RabbitMqMessageReceiver.FeedMessageDeserializationFailed"/> event
             </summary>
             <param name="data">A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing raw data of the message that could not be deserialized</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess.RabbitMqMessageReceiver.RaiseMessageReceived(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[])">
             <summary>
@@ -11560,6 +11573,12 @@
             </summary>
             <value>The raw message</value>
         </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Entities.IEventMessage`1.RoutingKey">
+            <summary>
+            routingKey
+            </summary>
+            <value>routingKey</value>
+        </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.IFixtureChange`1">
             <summary>
             Defines a contract implemented by messages which indicate a fixture was changed
@@ -11997,7 +12016,7 @@
             </summary>
             <value>The superseded by</value>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetCancel`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Nullable{System.Int64},Sportradar.OddsFeed.SDK.Common.Urn,System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketCancel},System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetCancel`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Nullable{System.Int64},Sportradar.OddsFeed.SDK.Common.Urn,System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketCancel},System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetCancel`1" /> class
             </summary>
@@ -12010,6 +12029,7 @@
             <param name="supersededBy">If the market was canceled because of a migration from a different sport event, a <see cref="T:Sportradar.OddsFeed.SDK.Common.Urn" /> specifying the sport event from which the market has migrated</param>
             <param name="markets">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /></param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param> 
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetSettlement`1">
             <summary>
@@ -12018,7 +12038,7 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetSettlement`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketWithSettlement},System.Int32,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetSettlement`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketWithSettlement},System.Int32,System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetSettlement`1" /> class
             </summary>
@@ -12029,6 +12049,7 @@
             <param name="markets">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /></param>
             <param name="certainty">A <see cref="T:Sportradar.OddsFeed.SDK.Entities.IBetSettlement`1"/> certainty</param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetStop`1">
             <summary>
@@ -12047,7 +12068,7 @@
             Get a groups specifying that all markets with that groups needs to be stopped
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetStop`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},Sportradar.OddsFeed.SDK.Entities.Enums.MarketStatus,System.Collections.Generic.IEnumerable{System.String},System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetStop`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},Sportradar.OddsFeed.SDK.Entities.Enums.MarketStatus,System.Collections.Generic.IEnumerable{System.String},System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetStop`1" /> class
             </summary>
@@ -12058,6 +12079,7 @@
             <param name="marketStatus">a <see cref="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.BetStop`1.MarketStatus" /> specifying the new status of the associated markets</param>
             <param name="groups">a list of <see cref="T:System.String"/> specifying which market groups needs to be stopped</param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.CashOutProbabilities`1">
             <summary>
@@ -12092,7 +12114,7 @@
             </summary>
             <value>The betting status.</value>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.CashOutProbabilities`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketWithProbabilities},Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Caching.Events.INamedValuesProvider,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.CashOutProbabilities`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketWithProbabilities},Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Caching.Events.INamedValuesProvider,System.Byte[],System.String)">
             <summary>Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.OddsChange`1" /> class</summary>
             <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
             <param name="producer">The <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message" /> message</param>
@@ -12102,6 +12124,7 @@
             <param name="markets">An <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /></param>
             <param name="namedValuesProvider">The <see cref="T:Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Caching.Events.INamedValuesProvider"/> used to provide names for betting status and bet stop reason</param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Competition">
             <summary>
@@ -12275,7 +12298,7 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /> class
             </summary>
@@ -12284,6 +12307,7 @@
             <param name="sportEvent">An <see cref="T:Sportradar.OddsFeed.SDK.Entities.Rest.ISportEvent" /> derived instance representing the sport event associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /></param>
             <param name="requestId">The id of the request which triggered the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /> message or a null reference</param>
             <param name="rawMessage">The raw message </param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1.Event">
             <summary>
@@ -12301,13 +12325,19 @@
             </summary>
             <value>The raw message received from the broker</value>
         </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1.RoutingKey">
+            <summary>
+            routingKey
+            </summary>
+            <value>routingKey from the broker</value>
+        </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.FixtureChange`1">
             <summary>
             Represents a message dispatched by the feed when a fixture changes
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.FixtureChange`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},Sportradar.OddsFeed.SDK.Entities.Enums.FixtureChangeType,System.Nullable{System.Int64},System.Int64,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.FixtureChange`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},Sportradar.OddsFeed.SDK.Entities.Enums.FixtureChangeType,System.Nullable{System.Int64},System.Int64,System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.FixtureChange`1" /> class
             </summary>
@@ -12319,6 +12349,7 @@
             <param name="nextLiveTime">The next live time</param>
             <param name="startTime">A value specifying the start time of the fixture in milliseconds since EPOCH UTC </param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.FixtureChange`1.ChangeType">
             <summary>
@@ -12602,7 +12633,7 @@
             A <see cref="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.MarketMessage`2.Markets" /> property backing field
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.MarketMessage`2.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`1,System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{`0},System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.MarketMessage`2.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`1,System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{`0},System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.MarketMessage`2" /> class
             </summary>
@@ -12612,6 +12643,7 @@
             <param name="requestId">The id of the request which triggered the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /> message or a null reference</param>
             <param name="markets">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /></param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routing</param>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.MarketMessage`2.Markets">
             <summary>Gets a <see cref="T:System.Collections.Generic.IEnumerable`1" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /></summary>
@@ -13007,7 +13039,7 @@
             </summary>
             <value>The odds generation properties</value>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.OddsChange`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Nullable{Sportradar.OddsFeed.SDK.Entities.Enums.OddsChangeReason},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketWithOdds},Sportradar.OddsFeed.SDK.Messages.Feed.oddsGenerationProperties,Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Caching.Events.INamedValuesProvider,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.OddsChange`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Nullable{Sportradar.OddsFeed.SDK.Entities.Enums.OddsChangeReason},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketWithOdds},Sportradar.OddsFeed.SDK.Messages.Feed.oddsGenerationProperties,Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Caching.Events.INamedValuesProvider,System.Byte[],System.String)">
             <summary>Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.OddsChange`1" /> class</summary>
             <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
             <param name="producer">The <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message" /> message</param>
@@ -13020,6 +13052,7 @@
             <param name="oddsGenerationProperties">Provided by the prematch odds producer only, and contains a few key-parameters that can be used in a client’s own special odds model, or even offer spread betting bets based on it</param>
             <param name="namedValuesProvider">The <see cref="T:Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Caching.Events.INamedValuesProvider"/> used to provide names for betting status and bet stop reason</param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.OddsGeneration">
             <summary>
@@ -13284,7 +13317,7 @@
             A null value indicates the period ended when the market was closed
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetCancel`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketCancel},System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetCancel`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketCancel},System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetCancel`1" /> class
             </summary>
@@ -13296,6 +13329,7 @@
             <param name="endTime">The number of milliseconds from UTC epoch representing the end of rollback cancellation period</param>
             <param name="markets">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /></param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetSettlement`1">
             <summary>
@@ -13303,7 +13337,7 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetSettlement`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketCancel},System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetSettlement`1.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,`0,System.Nullable{System.Int64},System.Collections.Generic.IEnumerable{Sportradar.OddsFeed.SDK.Entities.IMarketCancel},System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.RollbackBetSettlement`1" /> message
             </summary>
@@ -13313,6 +13347,7 @@
             <param name="requestId">The id of the request which triggered the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /> message or a null reference</param>
             <param name="markets">An <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMarketMessage`2" /> describing markets associated with the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /></param>
             <param name="rawMessage">The raw message</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.SnapshotCompleted">
             <summary>
@@ -13387,11 +13422,12 @@
             Gets the <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing message unprocessed data
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EventArguments.MessageDeserializationFailedEventArgs.#ctor(System.Collections.Generic.ICollection{System.Byte})">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EventArguments.MessageDeserializationFailedEventArgs.#ctor(System.Collections.Generic.ICollection{System.Byte},System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EventArguments.MessageDeserializationFailedEventArgs"/> class
             </summary>
             <param name="rawData">the name of the message which could not be deserialized, or a null reference if message name could not be retrieved</param>
+            <param name="routingKey">routingKey</param>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.FeedMessageHandler.StopProcessingFixtureChange(Sportradar.OddsFeed.SDK.Messages.Feed.fixture_change)">
             <summary>
@@ -33840,6 +33876,11 @@
         <member name="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage">
             <summary>
             Represents a base class for messages received from the feed
+            </summary>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage.RoutingKey">
+            <summary>
+            routingKey
             </summary>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage.SportId">

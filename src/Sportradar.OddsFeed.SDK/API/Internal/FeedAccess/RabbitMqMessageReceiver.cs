@@ -140,6 +140,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess
                     messageBody = Encoding.UTF8.GetString(bodyBytes);
                     feedMessage = _deserializer.Deserialize(new MemoryStream(bodyBytes));
                     feedMessage.ReceivedAt = receivedAt;
+                    feedMessage.RoutingKey = eventArgs.RoutingKey;
                     producer = _producerManager.GetProducer(feedMessage.ProducerId);
                     messageName = feedMessage.GetType().Name;
                     if (!string.IsNullOrEmpty(feedMessage.EventId) && Urn.TryParse(feedMessage.EventId, out var eventUrn))
@@ -206,14 +207,14 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess
             {
                 ExecutionLog.LogError(ex, "Failed to parse message. RoutingKey={RoutingKey} Message: {MessageBody}", eventArgs.RoutingKey, messageBody);
                 UofSdkTelemetry.RabbitMessageReceiverDeserializationException.Add(1);
-                RaiseDeserializationFailed(eventArgs.Body.ToArray());
+                RaiseDeserializationFailed(eventArgs.Body.ToArray(), eventArgs.RoutingKey);
                 return;
             }
             catch (Exception ex)
             {
                 ExecutionLog.LogError(ex, "Error consuming feed message. RoutingKey={RoutingKey} Message: {MessageBody}", eventArgs.RoutingKey, messageBody);
                 UofSdkTelemetry.RabbitMessageReceiverConsumingException.Add(1);
-                RaiseDeserializationFailed(eventArgs.Body.ToArray());
+                RaiseDeserializationFailed(eventArgs.Body.ToArray(), eventArgs.RoutingKey);
                 return;
             }
 
@@ -267,9 +268,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.FeedAccess
         /// Raises the <see cref="FeedMessageDeserializationFailed"/> event
         /// </summary>
         /// <param name="data">A <see cref="IEnumerable{Byte}"/> containing raw data of the message that could not be deserialized</param>
-        private void RaiseDeserializationFailed(byte[] data)
+        /// <param name="routingKey">routingKey</param>
+        private void RaiseDeserializationFailed(byte[] data, string routingKey)
         {
-            FeedMessageDeserializationFailed?.Invoke(this, new MessageDeserializationFailedEventArgs(data));
+            FeedMessageDeserializationFailed?.Invoke(this, new MessageDeserializationFailedEventArgs(data, routingKey));
         }
 
         /// <summary>
