@@ -17,15 +17,17 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
         /// Maps (converts) the provided <see cref="snapshot_complete"/> instance to the <see cref="ISnapshotCompleted"/> instance
         /// </summary>
         /// <param name="message">A <see cref="snapshot_complete"/> instance to be mapped (converted)</param>
+        /// <param name="rawMessage">raw message from broker</param>
         /// <returns>A <see cref="ISnapshotCompleted"/> instance constructed from information in the provided <see cref="snapshot_complete"/></returns>
-        ISnapshotCompleted MapSnapShotCompleted(snapshot_complete message);
+        ISnapshotCompleted MapSnapShotCompleted(snapshot_complete message, byte[] rawMessage);
 
         /// <summary>
         /// Maps (converts) the provided <see cref="alive"/> instance to the <see cref="IAlive"/> instance
         /// </summary>
         /// <param name="message">A <see cref="alive"/> instance to be mapped (converted)</param>
+        /// <param name="rawMessage">raw message from broker</param>
         /// <returns>A <see cref="IAlive"/> instance constructed from information in the provided <see cref="alive"/></returns>
-        IAlive MapAlive(alive message);
+        IAlive MapAlive(alive message, byte[] rawMessage);
 
         /// <summary>
         /// Maps (converts) the provided <see cref="fixture_change"/> instance to the <see cref="IFixtureChange{T}"/> instance

@@ -37,7 +37,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// Gets a value indicating whether the current <see cref="UofSession"/> is opened
         /// </summary>
         public bool IsOpened => Interlocked.Read(ref _isOpened) == 1;
-
+        
+        /// <summary>
+        /// Raised when an alive message is received
+        /// </summary>
+        public event EventHandler<AliveEventArgs> OnAlive;
+        
         /// <summary>
         /// Raised when a odds change message is received from the feed
         /// </summary>
@@ -94,6 +99,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// <param name="rawMessage"></param>
         public virtual void Dispatch(FeedMessage message, byte[] rawMessage)
         {
+            if (message is alive alive)
+            {
+                DispatchAlive(alive, rawMessage);
+                return;
+            }
+            
             if (message is odds_change oddsChange)
             {
                 DispatchOddsChange(oddsChange, rawMessage);
@@ -137,7 +148,18 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             }
             throw new ArgumentException($"FeedMessage of type '{message.GetType().Name}' is not supported.");
         }
-
+        
+        /// <summary>
+        /// Dispatches the <see cref="alive"/> message
+        /// </summary>
+        /// <param name="message">The <see cref="alive"/> message to dispatch</param>
+        /// <param name="rawMessage">A raw message received from the feed</param>
+        private void DispatchAlive(alive message, byte[] rawMessage)
+        {
+            var eventArgs = new AliveEventArgs(MessageMapper, message, rawMessage);
+            Dispatch(OnAlive, eventArgs, message);
+        }
+        
         /// <summary>
         /// Dispatches the <see cref="odds_change"/> message
         /// </summary>

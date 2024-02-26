@@ -17,12 +17,16 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// </summary>
         /// <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
         /// <param name="producer">The <see cref="IProducer" /> specifying the producer / service which dispatched the current <see cref="Message" /> message</param>
-        protected Message(IMessageTimestamp timestamp, IProducer producer)
+        /// <param name="rawMessage">raw message from broker</param>
+        /// <param name="requestId">broker message routingKey</param>
+        protected Message(IMessageTimestamp timestamp, IProducer producer, byte[] rawMessage, string routingKey)
         {
             Guard.Argument(timestamp, nameof(timestamp)).NotNull();
 
             Timestamps = timestamp;
             Producer = producer;
+            RawMessage = rawMessage;
+            RoutingKey = routingKey;
         }
 
         /// <summary>
@@ -35,5 +39,17 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// Gets the <see cref="IProducer" /> specifying the producer / service which dispatched the current <see cref="IMessage" /> message
         /// </summary>
         public IProducer Producer { get; }
+        
+        /// <summary>
+        /// Gets the raw message received from the broker
+        /// </summary>
+        /// <value>The raw message received from the broker</value>
+        public byte[] RawMessage { get; }
+
+        /// <summary>
+        /// routingKey
+        /// </summary>
+        /// <value>routingKey from the broker</value>
+        public string RoutingKey { get; }
     }
 }

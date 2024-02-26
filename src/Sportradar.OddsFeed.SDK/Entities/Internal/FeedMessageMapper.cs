@@ -1,4 +1,4 @@
-﻿// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
+// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
 
 using System;
 using System.Collections.Generic;
@@ -436,24 +436,36 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
         /// Maps (converts) the provided <see cref="alive"/> instance to the <see cref="IAlive"/> instance
         /// </summary>
         /// <param name="message">A <see cref="alive"/> instance to be mapped (converted)</param>
+        /// <param name="rawMessage">raw message from broker</param>
         /// <returns>A <see cref="IAlive"/> instance constructed from information in the provided <see cref="alive"/></returns>
-        public IAlive MapAlive(alive message)
+        public IAlive MapAlive(alive message, byte[] rawMessage)
         {
             Guard.Argument(message, nameof(message)).NotNull();
 
-            return new Alive(new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt, SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product), message.subscribed != 0);
+            return new Alive(
+                new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt,
+                    SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product),
+                message.subscribed != 0,
+                rawMessage,
+                message.RoutingKey);
         }
 
         /// <summary>
         /// Maps (converts) the provided <see cref="snapshot_complete"/> instance to the <see cref="ISnapshotCompleted"/> instance
         /// </summary>
         /// <param name="message">A <see cref="snapshot_complete"/> instance to be mapped (converted)</param>
+        /// <param name="rawMessage">raw message from broker</param>
         /// <returns>A <see cref="ISnapshotCompleted"/> instance constructed from information in the provided <see cref="snapshot_complete"/></returns>
-        public ISnapshotCompleted MapSnapShotCompleted(snapshot_complete message)
+        public ISnapshotCompleted MapSnapShotCompleted(snapshot_complete message, byte[] rawMessage)
         {
             Guard.Argument(message, nameof(message)).NotNull();
 
-            return new SnapshotCompleted(new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt, SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product), message.request_id);
+            return new SnapshotCompleted(
+                new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt,
+                    SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product),
+                message.request_id,
+                rawMessage,
+                message.RoutingKey);
         }
 
         /// <summary>
