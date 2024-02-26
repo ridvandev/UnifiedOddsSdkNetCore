@@ -1518,6 +1518,11 @@
             </summary>
             <typeparam name="T">A <see cref="T:Sportradar.OddsFeed.SDK.Entities.Rest.ISportEvent"/> derived type specifying the type of sport associated with <see cref="T:Sportradar.OddsFeed.SDK.Api.IEntityDispatcher`1"/></typeparam>
         </member>
+        <member name="E:Sportradar.OddsFeed.SDK.Api.IEntityDispatcher`1.OnAlive">
+            <summary>
+            Raised when an alive message is received
+            </summary>
+        </member>
         <member name="E:Sportradar.OddsFeed.SDK.Api.IEntityDispatcher`1.OnOddsChange">
             <summary>
             Raised when a odds change message is received from the feed
@@ -4778,6 +4783,11 @@
             Gets a value indicating whether the current <see cref="T:Sportradar.OddsFeed.SDK.Api.Internal.UofSession"/> is opened
             </summary>
         </member>
+        <member name="E:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.OnAlive">
+            <summary>
+            Raised when an alive message is received
+            </summary>
+        </member>
         <member name="E:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.OnOddsChange">
             <summary>
             Raised when a odds change message is received from the feed
@@ -4826,6 +4836,13 @@
             </summary>
             <param name="message"></param>
             <param name="rawMessage"></param>
+        </member>
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.DispatchAlive(Sportradar.OddsFeed.SDK.Messages.Feed.alive,System.Byte[])">
+            <summary>
+            Dispatches the <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/> message
+            </summary>
+            <param name="message">The <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/> message to dispatch</param>
+            <param name="rawMessage">A raw message received from the feed</param>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.DispatchOddsChange(Sportradar.OddsFeed.SDK.Messages.Feed.odds_change,System.Byte[])">
             <summary>
@@ -11567,18 +11584,6 @@
             no requestId was provided to the request
             </summary>
         </member>
-        <member name="P:Sportradar.OddsFeed.SDK.Entities.IEventMessage`1.RawMessage">
-            <summary>
-            Gets the raw message
-            </summary>
-            <value>The raw message</value>
-        </member>
-        <member name="P:Sportradar.OddsFeed.SDK.Entities.IEventMessage`1.RoutingKey">
-            <summary>
-            routingKey
-            </summary>
-            <value>routingKey</value>
-        </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.IFixtureChange`1">
             <summary>
             Defines a contract implemented by messages which indicate a fixture was changed
@@ -11847,6 +11852,18 @@
             </summary>
             <value>The timestamps</value>
         </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Entities.IMessage.RawMessage">
+            <summary>
+            Gets the raw message
+            </summary>
+            <value>The raw message</value>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Entities.IMessage.RoutingKey">
+            <summary>
+            routingKey
+            </summary>
+            <value>routingKey</value>
+        </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp">
             <summary>
             Defines a contract for all message timestamps
@@ -11979,13 +11996,15 @@
             Represents an alive message dispatched by the feed
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Alive.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,System.Boolean)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Alive.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,System.Boolean,System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Alive" /> class
             </summary>
             <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
             <param name="producer">The <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message" /> message</param>
             <param name="subscribed">A value indicating whether the SDK is subscribed to the producer specified by the <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> property</param>
+            <param name="rawMessage">raw message from broker</param>
+            <param name="requestId">broker message routingKey</param>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Alive.Subscribed">
             <summary>
@@ -12318,18 +12337,6 @@
             <summary>
             Get the id of the request which triggered the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1" /> message or a null reference if no requestId was provided to the request
             </summary>
-        </member>
-        <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1.RawMessage">
-            <summary>
-            Gets the raw message received from the broker
-            </summary>
-            <value>The raw message received from the broker</value>
-        </member>
-        <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.EventMessage`1.RoutingKey">
-            <summary>
-            routingKey
-            </summary>
-            <value>routingKey from the broker</value>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.FixtureChange`1">
             <summary>
@@ -12936,12 +12943,14 @@
             A base class for all messages dispatched by the SDK
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message" /> class
             </summary>
             <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
             <param name="producer">The <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message" /> message</param>
+            <param name="rawMessage">raw message from broker</param>
+            <param name="requestId">broker message routingKey</param>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message.Timestamps">
             <summary>
@@ -12953,6 +12962,18 @@
             <summary>
             Gets the <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.IMessage" /> message
             </summary>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message.RawMessage">
+            <summary>
+            Gets the raw message received from the broker
+            </summary>
+            <value>The raw message received from the broker</value>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message.RoutingKey">
+            <summary>
+            routingKey
+            </summary>
+            <value>routingKey from the broker</value>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.MessageTimestamp">
             <summary>
@@ -13290,12 +13311,14 @@
             either by the feed or the SDK itself
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.ProducerStatusChange.#ctor(System.Int64,Sportradar.OddsFeed.SDK.Api.IProducer)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.ProducerStatusChange.#ctor(System.Int64,Sportradar.OddsFeed.SDK.Api.IProducer,System.Byte[],System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.ProducerStatusChange" /> class
             </summary>
             <param name="timestamp">The value specifying when the message was generated in the milliseconds since EPOCH UTC </param>
             <param name="producer">The <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the
+            <param name="rawMessage">raw message from broker</param>
+            <param name="requestId">broker message routingKey</param>
             current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.ProducerStatusChange" /> message
             </param>
         </member>
@@ -13354,12 +13377,14 @@
             Represents a message dispatched by the feed after all the messages associated with snapshot request were dispatched
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.SnapshotCompleted.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,System.Int64)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.SnapshotCompleted.#ctor(Sportradar.OddsFeed.SDK.Entities.IMessageTimestamp,Sportradar.OddsFeed.SDK.Api.IProducer,System.Int64,System.Byte[],System.String)">
             <summary>
             </summary>
             <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
             <param name="producer">The <see cref="T:Sportradar.OddsFeed.SDK.Api.IProducer" /> specifying the producer / service which dispatched the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.Message" /> message</param>
             <param name="requestId">the id of the request which triggered the current <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.SnapshotCompleted" /> message</param>
+            <param name="rawMessage">raw message from broker</param>
+            <param name="requestId">broker message routingKey</param>
         </member>
         <member name="P:Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl.SnapshotCompleted.RequestId">
             <summary>
@@ -13563,18 +13588,20 @@
             <param name="outcomeDefinition">The associated <see cref="T:Sportradar.OddsFeed.SDK.Entities.IOutcomeDefinition"/></param>
             <returns>IOutcomeOdds</returns>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.FeedMessageMapper.MapAlive(Sportradar.OddsFeed.SDK.Messages.Feed.alive)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.FeedMessageMapper.MapAlive(Sportradar.OddsFeed.SDK.Messages.Feed.alive,System.Byte[])">
             <summary>
             Maps (converts) the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/> instance to the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.IAlive"/> instance
             </summary>
             <param name="message">A <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/> instance to be mapped (converted)</param>
+            <param name="rawMessage">raw message from broker</param>
             <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.IAlive"/> instance constructed from information in the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/></returns>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.FeedMessageMapper.MapSnapShotCompleted(Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.FeedMessageMapper.MapSnapShotCompleted(Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete,System.Byte[])">
             <summary>
             Maps (converts) the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/> instance to the <see cref="T:Sportradar.OddsFeed.SDK.Entities.ISnapshotCompleted"/> instance
             </summary>
             <param name="message">A <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/> instance to be mapped (converted)</param>
+            <param name="rawMessage">raw message from broker</param>
             <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Entities.ISnapshotCompleted"/> instance constructed from information in the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/></returns>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.FeedMessageMapper.MapFixtureChange``1(Sportradar.OddsFeed.SDK.Messages.Feed.fixture_change,System.Collections.Generic.IEnumerable{System.Globalization.CultureInfo},System.Byte[])">
@@ -13891,18 +13918,20 @@
             Defines a contract implemented by classes used to map (convert) feed message to those used by the SDK
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper.MapSnapShotCompleted(Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper.MapSnapShotCompleted(Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete,System.Byte[])">
             <summary>
             Maps (converts) the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/> instance to the <see cref="T:Sportradar.OddsFeed.SDK.Entities.ISnapshotCompleted"/> instance
             </summary>
             <param name="message">A <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/> instance to be mapped (converted)</param>
+            <param name="rawMessage">raw message from broker</param>
             <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Entities.ISnapshotCompleted"/> instance constructed from information in the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/></returns>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper.MapAlive(Sportradar.OddsFeed.SDK.Messages.Feed.alive)">
+        <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper.MapAlive(Sportradar.OddsFeed.SDK.Messages.Feed.alive,System.Byte[])">
             <summary>
             Maps (converts) the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/> instance to the <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.IAlive"/> instance
             </summary>
             <param name="message">A <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/> instance to be mapped (converted)</param>
+            <param name="rawMessage">raw message from broker</param>
             <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.IAlive"/> instance constructed from information in the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.alive"/></returns>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper.MapFixtureChange``1(Sportradar.OddsFeed.SDK.Messages.Feed.fixture_change,System.Collections.Generic.IEnumerable{System.Globalization.CultureInfo},System.Byte[])">

@@ -17,9 +17,11 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// </summary>
         /// <param name="timestamp">The value specifying when the message was generated in the milliseconds since EPOCH UTC </param>
         /// <param name="producer">The <see cref="IProducer" /> specifying the producer / service which dispatched the
+        /// <param name="rawMessage">raw message from broker</param>
+        /// <param name="requestId">broker message routingKey</param>
         /// current <see cref="ProducerStatusChange" /> message
         /// </param>
-        public ProducerStatusChange(long timestamp, IProducer producer)
-            : base(new MessageTimestamp(timestamp), producer) { }
+        public ProducerStatusChange(long timestamp, IProducer producer, byte[] rawMessage, string routingKey)
+            : base(new MessageTimestamp(timestamp), producer, rawMessage, routingKey) { }
     }
 }

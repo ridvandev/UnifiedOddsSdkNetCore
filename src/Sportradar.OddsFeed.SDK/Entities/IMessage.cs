@@ -21,5 +21,17 @@ namespace Sportradar.OddsFeed.SDK.Entities
         /// </summary>
         /// <value>The timestamps</value>
         IMessageTimestamp Timestamps { get; }
+        
+        /// <summary>
+        /// Gets the raw message
+        /// </summary>
+        /// <value>The raw message</value>
+        byte[] RawMessage { get; }
+        
+        /// <summary>
+        /// routingKey
+        /// </summary>
+        /// <value>routingKey</value>
+        string RoutingKey { get; }
     }
 }

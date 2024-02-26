@@ -214,12 +214,6 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         {
             Guard.Argument(message, nameof(message)).NotNull();
 
-            if (message is alive)
-            {
-                //ProcessAlive(alive);
-                return;
-            }
-
             if (message is snapshot_complete)
             {
                 //ProcessSnapshotComplete(snapShotComplete);
