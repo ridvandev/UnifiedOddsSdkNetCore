@@ -26,8 +26,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
                                             ISequenceGenerator sequenceGenerator,
                                             IDeserializer<response> responseDeserializer,
                                             ILogger logger,
-                                            int connectionFailureLimit = 5,
-                                            int connectionFailureTimeout = 15)
+                                            int connectionFailureLimit = int.MaxValue,
+                                            int connectionFailureTimeout = 5)
             : base(sdkHttpClient, sequenceGenerator, responseDeserializer, logger, connectionFailureLimit, connectionFailureTimeout)
         {
         }

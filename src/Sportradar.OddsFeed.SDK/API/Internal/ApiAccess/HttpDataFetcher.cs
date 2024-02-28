@@ -58,8 +58,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess
         /// <param name="saveResponseHeader">Indicates if the response header should be obtained</param>
         public HttpDataFetcher(ISdkHttpClient sdkHttpClient,
                                IDeserializer<response> responseDeserializer,
-                               int connectionFailureLimit = 5,
-                               int connectionFailureTimeout = 15,
+                               int connectionFailureLimit = int.MaxValue,
+                               int connectionFailureTimeout = 5,
                                bool saveResponseHeader = true)
         {
             Guard.Argument(sdkHttpClient, nameof(sdkHttpClient)).NotNull();
