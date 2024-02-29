@@ -1,5 +1,6 @@
 ﻿// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
 
+using System;
 using Sportradar.OddsFeed.SDK.Entities.Internal;
 using Sportradar.OddsFeed.SDK.Messages.Feed;
 using Sportradar.OddsFeed.SDK.Tests.Common;
@@ -21,7 +22,7 @@ public class MapAliveTests : MapEntityTestBase
     {
         var record = Load<alive>("alive.xml", null, null);
         TestData.FillMessageTimestamp(record);
-        var entity = Mapper.MapAlive(record);
+        var entity = Mapper.MapAlive(record, Array.Empty<byte>());
         Assert.NotNull(entity);
     }
 
@@ -30,7 +31,7 @@ public class MapAliveTests : MapEntityTestBase
     {
         var record = Load<alive>("alive.xml", null, null);
         TestData.FillMessageTimestamp(record);
-        var entity = Mapper.MapAlive(record);
+        var entity = Mapper.MapAlive(record, Array.Empty<byte>());
         TestEntityValues(entity, record);
     }
 
