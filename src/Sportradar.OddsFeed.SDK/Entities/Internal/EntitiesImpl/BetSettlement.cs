@@ -27,14 +27,16 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="markets">An <see cref="IEnumerable{T}" /> describing markets associated with the current <see cref="IMarketMessage{T, R}" /></param>
         /// <param name="certainty">A <see cref="IBetSettlement{T}"/> certainty</param>
         /// <param name="rawMessage">The raw message</param>
+        /// <param name="routingKey">routingKey</param>
         public BetSettlement(IMessageTimestamp timestamp,
                              IProducer producer,
                              T @event,
                              long? requestId,
                              IEnumerable<IMarketWithSettlement> markets,
                              int certainty,
-                             byte[] rawMessage)
-            : base(timestamp, producer, @event, requestId, markets, rawMessage)
+                             byte[] rawMessage,
+                             string routingKey)
+            : base(timestamp, producer, @event, requestId, markets, rawMessage, routingKey)
         {
             if (certainty == 1)
             {

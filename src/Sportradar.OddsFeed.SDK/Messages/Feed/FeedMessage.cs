@@ -18,6 +18,11 @@ namespace Sportradar.OddsFeed.SDK.Messages.Feed
     public abstract class FeedMessage
     {
         /// <summary>
+        /// routingKey
+        /// </summary>
+        [XmlIgnore]
+        public string RoutingKey { get; set; }
+        /// <summary>
         /// Gets or sets a <see cref="Urn"/> representing the id of the sport associated with the current <see cref="FeedMessage"/> instance
         /// </summary>
         [XmlIgnore]

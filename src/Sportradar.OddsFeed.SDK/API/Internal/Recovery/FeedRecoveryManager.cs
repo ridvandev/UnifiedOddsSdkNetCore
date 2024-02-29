@@ -235,12 +235,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Recovery
 
             if (e.NewStatus == ProducerRecoveryStatus.Completed && e.OldStatus != ProducerRecoveryStatus.Completed)
             {
-                var statusChange = new ProducerStatusChange(SdkInfo.ToEpochTime(TimeProviderAccessor.Current.Now), tracker.Producer);
+                var statusChange = new ProducerStatusChange(SdkInfo.ToEpochTime(TimeProviderAccessor.Current.Now), tracker.Producer, Array.Empty<byte>(), "");
                 ProducerUp?.Invoke(this, new ProducerStatusChangeEventArgs(statusChange));
             }
             else if (e.NewStatus != ProducerRecoveryStatus.Completed && e.OldStatus == ProducerRecoveryStatus.Completed)
             {
-                var statusChange = new ProducerStatusChange(SdkInfo.ToEpochTime(TimeProviderAccessor.Current.Now), tracker.Producer);
+                var statusChange = new ProducerStatusChange(SdkInfo.ToEpochTime(TimeProviderAccessor.Current.Now), tracker.Producer, Array.Empty<byte>(), "");
                 ProducerDown?.Invoke(this, new ProducerStatusChangeEventArgs(statusChange));
             }
         }

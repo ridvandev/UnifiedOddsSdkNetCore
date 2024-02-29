@@ -71,8 +71,9 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="oddsGenerationProperties">Provided by the prematch odds producer only, and contains a few key-parameters that can be used in a client’s own special odds model, or even offer spread betting bets based on it</param>
         /// <param name="namedValuesProvider">The <see cref="INamedValuesProvider"/> used to provide names for betting status and bet stop reason</param>
         /// <param name="rawMessage">The raw message</param>
-        public OddsChange(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, OddsChangeReason? changeReason, int? betStopReason, int? bettingStatus, IEnumerable<IMarketWithOdds> markets, oddsGenerationProperties oddsGenerationProperties, INamedValuesProvider namedValuesProvider, byte[] rawMessage)
-            : base(timestamp, producer, @event, requestId, markets, rawMessage)
+        /// <param name="routingKey">routingKey</param>
+        public OddsChange(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, OddsChangeReason? changeReason, int? betStopReason, int? bettingStatus, IEnumerable<IMarketWithOdds> markets, oddsGenerationProperties oddsGenerationProperties, INamedValuesProvider namedValuesProvider, byte[] rawMessage, string routingKey)
+            : base(timestamp, producer, @event, requestId, markets, rawMessage, routingKey)
         {
             Guard.Argument(namedValuesProvider, nameof(namedValuesProvider)).NotNull();
 

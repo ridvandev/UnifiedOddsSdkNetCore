@@ -44,8 +44,9 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="supersededBy">If the market was canceled because of a migration from a different sport event, a <see cref="Urn" /> specifying the sport event from which the market has migrated</param>
         /// <param name="markets">An <see cref="IEnumerable{T}" /> describing markets associated with the current <see cref="IMarketMessage{T, R}" /></param>
         /// <param name="rawMessage">The raw message</param>
-        public BetCancel(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, long? startTime, long? endTime, Urn supersededBy, IEnumerable<IMarketCancel> markets, byte[] rawMessage)
-            : base(timestamp, producer, @event, requestId, markets, rawMessage)
+        /// <param name="routingKey">routingKey</param> 
+        public BetCancel(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, long? startTime, long? endTime, Urn supersededBy, IEnumerable<IMarketCancel> markets, byte[] rawMessage, string routingKey)
+            : base(timestamp, producer, @event, requestId, markets, rawMessage, routingKey)
         {
             StartTime = startTime;
             EndTime = endTime;
