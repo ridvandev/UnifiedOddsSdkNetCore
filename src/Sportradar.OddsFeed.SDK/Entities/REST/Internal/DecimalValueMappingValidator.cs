@@ -46,7 +46,8 @@ namespace Sportradar.OddsFeed.SDK.Entities.Rest.Internal
         {
             if (!specifiers.TryGetValue(_specifierName, out var specifierValue))
             {
-                throw new InvalidOperationException($"Required specifier[{_specifierName}] does not exist in the provided specifiers");
+                return false;
+                // throw new InvalidOperationException($"Required specifier[{_specifierName}] does not exist in the provided specifiers");
             }
 
             if (!decimal.TryParse(specifierValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
