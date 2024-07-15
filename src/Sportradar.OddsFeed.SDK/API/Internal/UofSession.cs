@@ -213,12 +213,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         {
             Guard.Argument(message, nameof(message)).NotNull();
 
-            if (message is snapshot_complete)
-            {
-                //ProcessSnapshotComplete(snapShotComplete);
-                //DispatchProducerUp(MessageMapperHelper.GetEnumValue<Product>(snapShotComplete.producer), snapShotComplete.timestamp);
-                return;
-            }
+            // if (message is snapshot_complete)
+            // {
+            //     //ProcessSnapshotComplete(snapShotComplete);
+            //     //DispatchProducerUp(MessageMapperHelper.GetEnumValue<Product>(snapShotComplete.producer), snapShotComplete.timestamp);
+            //     return;
+            // }
 
             base.Dispatch(message, rawMessage, MessageInterest);
         }
