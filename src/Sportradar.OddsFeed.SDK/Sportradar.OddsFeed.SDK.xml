@@ -1573,6 +1573,11 @@
             Raised when a fixture change message is received from the feed
             </summary>
         </member>
+        <member name="E:Sportradar.OddsFeed.SDK.Api.IEntityDispatcher`1.OnSnapshotComplete">
+            <summary>
+            Raised when snapshot_complete message is received
+            </summary>
+        </member>
         <member name="T:Sportradar.OddsFeed.SDK.Api.Internal.ApiAccess.ConnectionValidationResult">
             <summary>
             Defines possible reasons for connection failure
@@ -5596,6 +5601,11 @@
             Raised when a fixture change message is received from the feed
             </summary>
         </member>
+        <member name="E:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.OnSnapshotComplete">
+            <summary>
+            Raised when snapshot_complete message is received
+            </summary>
+        </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.#ctor(Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper,System.Collections.Generic.IEnumerable{System.Globalization.CultureInfo})">
             <summary>
             Initializes a new instance of the <see cref="T:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1"/> class
@@ -5603,7 +5613,7 @@
             <param name="messageMapper">A <see cref="T:Sportradar.OddsFeed.SDK.Entities.Internal.IFeedMessageMapper"/> used to map the feed messages to messages used by the SDK</param>
             <param name="defaultCultures">A <see cref="T:System.Collections.Generic.IEnumerable`1"/> specifying the default languages as specified in the configuration</param>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.Dispatch(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.Dispatch(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[],Sportradar.OddsFeed.SDK.Api.Config.MessageInterest)">
             <summary>
             Dispatches the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage"/>
             </summary>
@@ -5665,6 +5675,14 @@
             </summary>
             <param name="message">The <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.fixture_change"/> message to dispatch</param>
             <param name="rawMessage">A raw message received from the feed</param>
+        </member>
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.DispatchSnapshotComplete(Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete,System.Byte[],Sportradar.OddsFeed.SDK.Api.Config.MessageInterest)">
+            <summary>
+            Dispatches the <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/> message
+            </summary>
+            <param name="message">The <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.snapshot_complete"/> message to dispatch</param>
+            <param name="rawMessage">A raw message received from the feed</param>
+            <param name="interest">Message Interest</param>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.EntityDispatcher`1.OnOpening">
             <summary>
@@ -6171,12 +6189,13 @@
             Defines a contract implemented by classes used to dispatch entities.
             </summary>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.IEntityDispatcherInternal.Dispatch(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.IEntityDispatcherInternal.Dispatch(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[],Sportradar.OddsFeed.SDK.Api.Config.MessageInterest)">
             <summary>
             Dispatches the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage"/> to the user
             </summary>
             <param name="message">A <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage"/> to dispatch.</param>
             <param name="rawMessage">A raw message received from the feed</param>
+            <param name="interest">Message interest</param>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Api.Internal.IEntityTypeMapper">
             <summary>
@@ -8747,7 +8766,7 @@
             <param name="message">The <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage"/> instance which needs to be dispatched.</param>
             <returns>a <see cref="T:Sportradar.OddsFeed.SDK.Api.Internal.IEntityDispatcherInternal"/> which should be used to dispatch the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage"/></returns>
         </member>
-        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.UofSession.Dispatch(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[])">
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.UofSession.Dispatch(Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage,System.Byte[],Sportradar.OddsFeed.SDK.Api.Config.MessageInterest)">
             <summary>
             Dispatches the provided <see cref="T:Sportradar.OddsFeed.SDK.Messages.Feed.FeedMessage"/>
             </summary>

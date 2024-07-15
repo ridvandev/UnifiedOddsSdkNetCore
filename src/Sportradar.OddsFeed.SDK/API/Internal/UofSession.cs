@@ -181,7 +181,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             }
             ExecutionLog.LogDebug("{MessageInterest}Dispatching {MessageType} for {EventId} ({GeneratedAt}).{Elapsed}", WriteMessageInterest(), e.Message.GetType().Name, e.Message.EventId, e.Message.GeneratedAt, processingTook);
             var dispatcher = SelectDispatcher(e.Message);
-            dispatcher.Dispatch(e.Message, e.RawMessage);
+            dispatcher.Dispatch(e.Message, e.RawMessage, MessageInterest);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         /// </summary>
         /// <param name="message"></param>
         /// <param name="rawMessage"></param>
-        public override void Dispatch(FeedMessage message, byte[] rawMessage)
+        public override void Dispatch(FeedMessage message, byte[] rawMessage, MessageInterest interest)
         {
             Guard.Argument(message, nameof(message)).NotNull();
 
@@ -220,7 +220,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
                 return;
             }
 
-            base.Dispatch(message, rawMessage);
+            base.Dispatch(message, rawMessage, MessageInterest);
         }
 
         /// <summary>

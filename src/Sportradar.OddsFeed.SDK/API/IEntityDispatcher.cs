@@ -51,5 +51,10 @@ namespace Sportradar.OddsFeed.SDK.Api
         /// Raised when a fixture change message is received from the feed
         /// </summary>
         event EventHandler<FixtureChangeEventArgs<T>> OnFixtureChange;
+        
+        /// <summary>
+        /// Raised when snapshot_complete message is received
+        /// </summary>
+        event EventHandler<SnapshotCompleteEventArgs> OnSnapshotComplete;
     }
 }
