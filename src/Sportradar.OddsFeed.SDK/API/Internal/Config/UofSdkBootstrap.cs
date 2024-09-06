@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
     {
         internal const string HttpClientDefaultRequestHeaderForAccessToken = "x-access-token";
         internal const string HttpClientDefaultRequestHeaderForUserAgent = "User-Agent";
+
+        internal const string HttpClientDefaultRequestHeaderForEncoding = "Accept-Encoding";
 
         internal const string CacheStoreNameForInvariantMarketDescriptionsCache = "MemoryCacheForInvariantMarketDescriptionsCache";
         internal const string CacheStoreNameForVariantMarketDescriptionCache = "MemoryCacheForVariantMarketDescriptionCache";
@@ -145,7 +148,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
 
         private static void RegisterHttpClients(IServiceCollection services, IUofConfiguration configuration)
         {
-            var httpClientHandler = new HttpClientHandler { MaxConnectionsPerServer = configuration.Api.MaxConnectionsPerServer, AllowAutoRedirect = true };
+            var httpClientHandler = new HttpClientHandler
+            {
+                AllowAutoRedirect = true,
+                AutomaticDecompression = DecompressionMethods.GZip,
+                MaxConnectionsPerServer = configuration.Api.MaxConnectionsPerServer
+            };
 
             var userAgentData = string.Intern($"UfSdk-{SdkInfo.SdkType}/{SdkInfo.GetVersion()} (OS: {Environment.OSVersion}, NET: {Environment.Version}, Init: {DateTime.UtcNow:yyyyMMddHHmm})");
             //TODO can change to Version 2.0 - and what does it mean
@@ -155,6 +163,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
                     configureClient.Timeout = configuration.Api.HttpClientTimeout;
                     configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForAccessToken, configuration.AccessToken);
                     configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForUserAgent, userAgentData);
+                    configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForEncoding, "gzip");
                 })
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
             services.AddHttpClient("HttpClientRecovery")
@@ -163,6 +172,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
                     configureClient.Timeout = configuration.Api.HttpClientRecoveryTimeout;
                     configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForAccessToken, configuration.AccessToken);
                     configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForUserAgent, userAgentData);
+                    configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForEncoding, "gzip");
                 })
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
             services.AddHttpClient("HttpClientFastFailing")
@@ -171,13 +181,14 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
                     configureClient.Timeout = configuration.Api.HttpClientFastFailingTimeout;
                     configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForAccessToken, configuration.AccessToken);
                     configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForUserAgent, userAgentData);
+                    configureClient.DefaultRequestHeaders.Add(HttpClientDefaultRequestHeaderForEncoding, "gzip");
                 })
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
 
             services.AddSingleton<ISdkHttpClient, SdkHttpClient>(serviceProvider =>
-
                 new SdkHttpClient(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient("HttpClient"))
             );
+
             services.AddSingleton<ISdkHttpClientRecovery, SdkHttpClientRecovery>(serviceProvider =>
 
                 new SdkHttpClientRecovery(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient("HttpClientRecovery"))
