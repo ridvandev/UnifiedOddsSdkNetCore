@@ -3,6 +3,7 @@
 using System;
 using System.Globalization;
 using Moq;
+using Sportradar.OddsFeed.SDK.Api.Config;
 using Sportradar.OddsFeed.SDK.Api;
 using Sportradar.OddsFeed.SDK.Api.EventArguments;
 using Sportradar.OddsFeed.SDK.Api.Internal;
@@ -94,14 +95,14 @@ public class EntityDispatcherTests
     {
         var dispatcher = GetDefaultSpecificEntityDispatcher<ISportEvent>();
 
-        Assert.Throws<ArgumentException>(() => dispatcher.Dispatch(new FakeMessage(), new byte[1]));
+        Assert.Throws<ArgumentException>(() => dispatcher.Dispatch(new FakeMessage(), new byte[1], MessageInterest.AllMessages));
     }
 
     [Fact]
     public void DispatchFeedMessage_WithoutHandler()
     {
         var dispatcher = GetDefaultSpecificEntityDispatcher<ISportEvent>();
-        dispatcher.Dispatch(new odds_change(), new byte[1]);
+        dispatcher.Dispatch(new odds_change(), new byte[1], MessageInterest.AllMessages);
 
         // TODO: how to test that nothing happens - maybe logs
         Assert.NotNull(dispatcher);
@@ -113,7 +114,7 @@ public class EntityDispatcherTests
         var msgIsDispatched = false;
         var dispatcher = GetDefaultSpecificEntityDispatcher<ISportEvent>();
         dispatcher.OnOddsChange += (_, _) => msgIsDispatched = true;
-        dispatcher.Dispatch(new odds_change(), new byte[1]);
+        dispatcher.Dispatch(new odds_change(), new byte[1], MessageInterest.AllMessages);
 
         Assert.True(msgIsDispatched);
     }
@@ -128,7 +129,7 @@ public class EntityDispatcherTests
             msgIsDispatched = true;
             throw new InvalidOperationException();
         };
-        dispatcher.Dispatch(new odds_change(), new byte[1]);
+        dispatcher.Dispatch(new odds_change(), new byte[1], MessageInterest.AllMessages);
 
         Assert.True(msgIsDispatched);
     }
@@ -195,7 +196,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new odds_change(), new byte[1]);
+        dispatcher.Dispatch(new odds_change(), new byte[1], MessageInterest.AllMessages);
 
         Assert.True(oddsChangeIsDispatched);
         Assert.False(fixtureChangeIsDispatched);
@@ -226,7 +227,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new fixture_change(), new byte[1]);
+        dispatcher.Dispatch(new fixture_change(), new byte[1], MessageInterest.AllMessages);
 
         Assert.False(oddsChangeIsDispatched);
         Assert.True(fixtureChangeIsDispatched);
@@ -257,7 +258,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new bet_stop(), new byte[1]);
+        dispatcher.Dispatch(new bet_stop(), new byte[1], MessageInterest.AllMessages);
 
         Assert.False(oddsChangeIsDispatched);
         Assert.False(fixtureChangeIsDispatched);
@@ -288,7 +289,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new bet_cancel(), new byte[1]);
+        dispatcher.Dispatch(new bet_cancel(), new byte[1], MessageInterest.AllMessages);
 
         Assert.False(oddsChangeIsDispatched);
         Assert.False(fixtureChangeIsDispatched);
@@ -319,7 +320,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new bet_settlement(), new byte[1]);
+        dispatcher.Dispatch(new bet_settlement(), new byte[1], MessageInterest.AllMessages);
 
         Assert.False(oddsChangeIsDispatched);
         Assert.False(fixtureChangeIsDispatched);
@@ -350,7 +351,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new rollback_bet_cancel(), new byte[1]);
+        dispatcher.Dispatch(new rollback_bet_cancel(), new byte[1], MessageInterest.AllMessages);
 
         Assert.False(oddsChangeIsDispatched);
         Assert.False(fixtureChangeIsDispatched);
@@ -381,7 +382,7 @@ public class EntityDispatcherTests
         dispatcher.OnRollbackBetCancel += (_, _) => rollbackBetCancelIsDispatched = true;
         dispatcher.OnRollbackBetSettlement += (_, _) => rollbackBetSettlementIsDispatched = true;
 
-        dispatcher.Dispatch(new rollback_bet_settlement(), new byte[1]);
+        dispatcher.Dispatch(new rollback_bet_settlement(), new byte[1], MessageInterest.AllMessages);
 
         Assert.False(oddsChangeIsDispatched);
         Assert.False(fixtureChangeIsDispatched);

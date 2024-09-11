@@ -357,7 +357,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnOddsChange += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -370,7 +370,7 @@ public class UofSessionTests
         var messageBytes = JsonSerializer.SerializeToUtf8Bytes(feedMessage);
         var session = GetDefaultSession();
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.False(messageIsDispatched);
     }
@@ -388,7 +388,7 @@ public class UofSessionTests
             throw new InvalidOperationException();
         };
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -402,7 +402,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnFixtureChange += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -416,7 +416,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnBetStop += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -430,7 +430,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnBetCancel += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -444,7 +444,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnBetSettlement += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -458,7 +458,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnRollbackBetCancel += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
@@ -472,7 +472,7 @@ public class UofSessionTests
         var session = GetDefaultSession();
         session.OnRollbackBetSettlement += (_, _) => messageIsDispatched = true;
 
-        session.Dispatch(feedMessage, messageBytes);
+        session.Dispatch(feedMessage, messageBytes, MessageInterest.AllMessages);
 
         Assert.True(messageIsDispatched);
     }
