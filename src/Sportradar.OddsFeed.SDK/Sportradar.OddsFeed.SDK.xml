@@ -511,6 +511,11 @@
             Gets the additional settings
             </summary>
         </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Api.Config.IUofConfiguration.RuntimePath">
+            <summary>
+            Gets the path to store internal data
+            </summary>
+        </member>
         <member name="T:Sportradar.OddsFeed.SDK.Api.Config.IUofProducerConfiguration">
             <summary>
             Defines a contract implemented by classes representing api connection configuration / settings
@@ -4731,6 +4736,14 @@
             <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Api.Config.IConfigurationBuilder" /> derived instance used to set general configuration properties</returns>
             <remarks>Use only positive numbers; negative are reserved for internal use.</remarks>
         </member>
+        <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.Config.ConfigurationBuilderBase`1.SetRuntimePath(System.String)">
+            <summary>
+            Sets the runtime path used to store internal data
+            </summary>
+            <param name="path">The path to be set</param>
+            <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Api.Config.IConfigurationBuilder" /> derived instance used to set general configuration properties</returns>
+            <remarks>Use a path to that the application has write access</remarks>
+        </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.Config.ConfigurationBuilderBase`1.SetDisabledProducers(System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
             Specifies the producers which should be disabled (i.e. no recovery, ...)
@@ -5035,6 +5048,11 @@
             Gets a value indicating to which unified feed environment sdk should connect
             </summary>
             <remarks>Dependent on the other configuration, it may set MQ and API host address and port</remarks>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Api.Internal.Config.IUofConfigurationSection.RuntimePath">
+            <summary>
+            Gets runtime path to store internal data
+            </summary>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Api.Internal.Config.IUofConfigurationSectionProvider">
             <summary>
@@ -5443,6 +5461,11 @@
             Gets a value indicating to which unified feed environment sdk should connect
             </summary>
             <remarks>Dependent on the other configuration, it may set MQ and API host address and port</remarks>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Api.Internal.Config.UofConfigurationSection.RuntimePath">
+            <summary>
+            Gets runtime path
+            </summary>
         </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.Internal.Config.UofConfigurationSection.GetSection">
             <summary>
@@ -7325,6 +7348,11 @@
             </summary>
             <value>The scope</value>
         </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Api.Internal.Producer.RuntimeFileName">
+            <summary>
+            Get full name of the runtime file to store internals
+            </summary>
+        </member>
         <member name="P:Sportradar.OddsFeed.SDK.Api.Internal.Producer.RecoveryInfo">
             <summary>
             Gets the recovery info about last recovery attempt
@@ -8916,6 +8944,11 @@
             Gets the scope of the producer
             </summary>
             <value>The scope</value>
+        </member>
+        <member name="P:Sportradar.OddsFeed.SDK.Api.IProducer.RuntimeFileName">
+            <summary>
+            Get full name of the runtime file to store internals
+            </summary>
         </member>
         <member name="T:Sportradar.OddsFeed.SDK.Api.IRecoveryInfo">
             <summary>
