@@ -28,6 +28,7 @@ using Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Dto.CustomBet;
 using Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Dto.Lottery;
 using Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Mapping;
 using Sportradar.OddsFeed.SDK.Entities.Rest.Internal.Mapping.Lottery;
+using Sportradar.OddsFeed.SDK.Entities.Rest.Internal.MarketNameGeneration;
 using Sportradar.OddsFeed.SDK.Entities.Rest.Internal.MarketNames;
 using Sportradar.OddsFeed.SDK.Messages.Feed;
 using Sportradar.OddsFeed.SDK.Messages.Rest;
@@ -156,7 +157,6 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
             };
 
             var userAgentData = string.Intern($"UfSdk-{SdkInfo.SdkType}/{SdkInfo.GetVersion()} (OS: {Environment.OSVersion}, NET: {Environment.Version}, Init: {DateTime.UtcNow:yyyyMMddHHmm})");
-            //TODO can change to Version 2.0 - and what does it mean
             services.AddHttpClient("HttpClient")
                 .ConfigureHttpClient(configureClient =>
                 {
@@ -863,7 +863,8 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
                     serviceProvider.GetRequiredService<IMarketCacheProvider>(),
                     serviceProvider.GetRequiredService<IProfileCache>(),
                     serviceProvider.GetRequiredService<INameExpressionFactory>(),
-                    serviceProvider.GetRequiredService<IUofConfiguration>().ExceptionHandlingStrategy
+                    serviceProvider.GetRequiredService<IUofConfiguration>().ExceptionHandlingStrategy,
+                    serviceProvider.GetRequiredService<ILoggerFactory>()
                 ));
             services.AddSingleton<IMarketCacheProvider, MarketCacheProvider>();
 
