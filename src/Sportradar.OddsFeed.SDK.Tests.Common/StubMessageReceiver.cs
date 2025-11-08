@@ -40,7 +40,7 @@ internal class StubMessageReceiver : IMessageReceiver
     public void SimulateDispatchFeedMessageDeserializationFailed(FeedMessage message)
     {
         var rawMessage = JsonSerializer.SerializeToUtf8Bytes(message);
-        FeedMessageDeserializationFailed?.Invoke(this, new MessageDeserializationFailedEventArgs(rawMessage));
+        FeedMessageDeserializationFailed?.Invoke(this, new MessageDeserializationFailedEventArgs(rawMessage, message.RoutingKey));
     }
 
     public void Open(MessageInterest interest, IEnumerable<string> routingKeys)

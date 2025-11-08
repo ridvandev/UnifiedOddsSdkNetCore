@@ -22,8 +22,9 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="markets">An <see cref="IMarketMessage{T,T1}" /> describing markets associated with the current <see cref="EventMessage{T}" /></param>
         /// <param name="rawMessage">The raw message</param>
         /// <param name="messageHeaders">The AMQP message headers</param>
-        public RollbackBetSettlement(IMessageTimestamp timestamp, IProducer producer, T sportEvent, long? requestId, IEnumerable<IMarketCancel> markets, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders)
-            : base(timestamp, producer, sportEvent, requestId, markets, rawMessage, messageHeaders)
+        /// <param name="routingKey">routingKey</param>
+        public RollbackBetSettlement(IMessageTimestamp timestamp, IProducer producer, T sportEvent, long? requestId, IEnumerable<IMarketCancel> markets, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders, string routingKey)
+            : base(timestamp, producer, sportEvent, requestId, markets, rawMessage, routingKey, messageHeaders)
         {
         }
     }

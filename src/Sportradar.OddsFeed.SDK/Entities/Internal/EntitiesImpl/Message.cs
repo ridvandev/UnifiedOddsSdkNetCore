@@ -24,8 +24,10 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// </summary>
         /// <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
         /// <param name="producer">The <see cref="IProducer" /> specifying the producer / service which dispatched the current <see cref="Message" /> message</param>
+        /// <param name="rawMessage">raw message from broker</param>
+        /// <param name="routingKey">broker message routingKey</param>
         /// <param name="messageHeaders">The AMQP message headers, or null for empty</param>
-        protected Message(IMessageTimestamp timestamp, IProducer producer, IReadOnlyDictionary<string, string> messageHeaders = null)
+        protected Message(IMessageTimestamp timestamp, IProducer producer, byte[] rawMessage, string routingKey, IReadOnlyDictionary<string, string> messageHeaders = null)
         {
             Guard.Argument(timestamp, nameof(timestamp)).NotNull();
             Guard.Argument(producer, nameof(producer)).NotNull();
@@ -33,6 +35,8 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
             Timestamps = timestamp;
             Producer = producer;
             MessageHeaders = messageHeaders ?? EmptyHeaders;
+            RawMessage = rawMessage;
+            RoutingKey = routingKey;
         }
 
         /// <summary>
@@ -51,5 +55,17 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// The returned dictionary is never null.
         /// </summary>
         public IReadOnlyDictionary<string, string> MessageHeaders { get; }
+        
+        /// <summary>
+        /// Gets the raw message received from the broker
+        /// </summary>
+        /// <value>The raw message received from the broker</value>
+        public byte[] RawMessage { get; }
+
+        /// <summary>
+        /// routingKey
+        /// </summary>
+        /// <value>routingKey from the broker</value>
+        public string RoutingKey { get; }
     }
 }

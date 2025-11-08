@@ -13,6 +13,11 @@ namespace Sportradar.OddsFeed.SDK.Api
     public interface IEntityDispatcher<T> where T : ISportEvent
     {
         /// <summary>
+        /// Raised when an alive message is received
+        /// </summary>
+        event EventHandler<AliveEventArgs> OnAlive;
+        
+        /// <summary>
         /// Raised when a odds change message is received from the feed
         /// </summary>
         event EventHandler<OddsChangeEventArgs<T>> OnOddsChange;
@@ -46,5 +51,10 @@ namespace Sportradar.OddsFeed.SDK.Api
         /// Raised when a fixture change message is received from the feed
         /// </summary>
         event EventHandler<FixtureChangeEventArgs<T>> OnFixtureChange;
+        
+        /// <summary>
+        /// Raised when snapshot_complete message is received
+        /// </summary>
+        event EventHandler<SnapshotCompleteEventArgs> OnSnapshotComplete;
     }
 }

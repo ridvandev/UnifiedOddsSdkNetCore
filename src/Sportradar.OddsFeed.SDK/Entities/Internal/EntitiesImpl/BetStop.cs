@@ -35,8 +35,9 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="groups">a list of <see cref="string"/> specifying which market groups needs to be stopped</param>
         /// <param name="rawMessage">The raw message</param>
         /// <param name="messageHeaders">The AMQP message headers</param>
-        public BetStop(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, MarketStatus marketStatus, IEnumerable<string> groups, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders)
-            : base(timestamp, producer, @event, requestId, rawMessage, messageHeaders)
+        /// <param name="routingKey">routingKey</param>
+        public BetStop(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, MarketStatus marketStatus, IEnumerable<string> groups, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders, string routingKey)
+            : base(timestamp, producer, @event, requestId, rawMessage, routingKey, messageHeaders)
         {
             MarketStatus = marketStatus;
             Groups = groups;

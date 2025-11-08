@@ -25,8 +25,9 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="startTime">A value specifying the start time of the fixture in milliseconds since EPOCH UTC </param>
         /// <param name="rawMessage">The raw message</param>
         /// <param name="messageHeaders">The AMQP message headers</param>
-        public FixtureChange(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, FixtureChangeType changeType, long? nextLiveTime, long startTime, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders)
-            : base(timestamp, producer, @event, requestId, rawMessage, messageHeaders)
+        /// <param name="routingKey">routingKey</param>
+        public FixtureChange(IMessageTimestamp timestamp, IProducer producer, T @event, long? requestId, FixtureChangeType changeType, long? nextLiveTime, long startTime, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders, string routingKey)
+            : base(timestamp, producer, @event, requestId, rawMessage, routingKey, messageHeaders)
         {
             ChangeType = changeType;
             NextLiveTime = nextLiveTime;

@@ -27,6 +27,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="certainty">A <see cref="IBetSettlement{T}"/> certainty</param>
         /// <param name="rawMessage">The raw message</param>
         /// <param name="messageHeaders">The AMQP message headers</param>
+        /// <param name="routingKey">routingKey</param>
         public BetSettlement(IMessageTimestamp timestamp,
                              IProducer producer,
                              T @event,
@@ -34,8 +35,9 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
                              IEnumerable<IMarketWithSettlement> markets,
                              int certainty,
                              byte[] rawMessage,
-                             IReadOnlyDictionary<string, string> messageHeaders)
-            : base(timestamp, producer, @event, requestId, markets, rawMessage, messageHeaders)
+                             IReadOnlyDictionary<string, string> messageHeaders,
+                             string routingKey)
+            : base(timestamp, producer, @event, requestId, markets, rawMessage, routingKey, messageHeaders)
         {
             if (certainty == 1)
             {

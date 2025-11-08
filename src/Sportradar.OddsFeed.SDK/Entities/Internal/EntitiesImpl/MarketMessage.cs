@@ -31,9 +31,10 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="requestId">The id of the request which triggered the current <see cref="EventMessage{T}" /> message or a null reference</param>
         /// <param name="markets">An <see cref="IEnumerable{IMarket}" /> describing markets associated with the current <see cref="IMarketMessage{T, R}" /></param>
         /// <param name="rawMessage">The raw message</param>
+        /// <param name="routingKey">routing</param>
         /// <param name="messageHeaders">The AMQP message headers</param>
-        protected MarketMessage(IMessageTimestamp timestamp, IProducer producer, T1 sportEvent, long? requestId, IEnumerable<T> markets, byte[] rawMessage, IReadOnlyDictionary<string, string> messageHeaders = null)
-            : base(timestamp, producer, sportEvent, requestId, rawMessage, messageHeaders)
+        protected MarketMessage(IMessageTimestamp timestamp, IProducer producer, T1 sportEvent, long? requestId, IEnumerable<T> markets, byte[] rawMessage, string routingKey, IReadOnlyDictionary<string, string> messageHeaders = null)
+            : base(timestamp, producer, sportEvent, requestId, rawMessage, routingKey, messageHeaders)
         {
             _markets = markets == null ? null : new ReadOnlyCollection<T>(markets.ToList());
         }

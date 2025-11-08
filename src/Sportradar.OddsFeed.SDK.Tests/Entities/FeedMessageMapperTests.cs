@@ -79,7 +79,7 @@ public class FeedMessageMapperTests
         var message = _deserializer.Deserialize<alive>(stream);
         TestData.FillMessageTimestamp(message);
         _validator.Validate(message);
-        var entity = _mapper.MapAlive(message);
+        var entity = _mapper.MapAlive(message, Array.Empty<byte>());
         Assert.NotNull(entity);
     }
 
@@ -457,7 +457,10 @@ public class FeedMessageMapperTests
         TestData.FillMessageTimestamp(message);
         message.SportId = UrnCreate.SportId(1000);
         _validator.Validate(message);
-        var entity = _mapper.MapSnapShotCompleted(message);
+        //read bytes from stream
+        byte[] bytes = new byte[stream.Length];
+        stream.Read(bytes, 0, bytes.Length);
+        var entity = _mapper.MapSnapShotCompleted(message, bytes);
 
         entity.ShouldNotBeNull();
         entity.RequestId.ShouldBePositive();

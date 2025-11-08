@@ -71,6 +71,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="namedValuesProvider">The <see cref="INamedValuesProvider"/> used to provide names for betting status and bet stop reason</param>
         /// <param name="rawMessage">The raw message</param>
         /// <param name="messageHeaders">The AMQP message headers</param>
+        /// <param name="routingKey">routingKey</param>
         public OddsChange(IMessageTimestamp timestamp,
                           IProducer producer,
                           T @event,
@@ -82,8 +83,8 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
                           oddsGenerationProperties oddsGenerationProperties,
                           INamedValuesProvider namedValuesProvider,
                           byte[] rawMessage,
-                          IReadOnlyDictionary<string, string> messageHeaders)
-            : base(timestamp, producer, @event, requestId, markets, rawMessage, messageHeaders)
+                          IReadOnlyDictionary<string, string> messageHeaders, string routingKey)
+            : base(timestamp, producer, @event, requestId, markets, rawMessage, routingKey, messageHeaders)
         {
             Guard.Argument(namedValuesProvider, nameof(namedValuesProvider)).NotNull();
 
