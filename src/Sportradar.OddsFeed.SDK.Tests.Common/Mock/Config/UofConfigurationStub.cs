@@ -65,6 +65,11 @@ public class UofConfigurationStub : IUofConfiguration
         get;
     }
 
+    public string RuntimePath
+    {
+        get;
+    }
+
     [SuppressMessage("ReSharper", "ConvertToPrimaryConstructor", Justification = "Pipeline format fails with primary constructor")]
     public UofConfigurationStub(IUofConfiguration config, IUofUsageConfiguration usageConfig)
     {
@@ -81,5 +86,6 @@ public class UofConfigurationStub : IUofConfiguration
         Cache = config.Cache;
         Additional = config.Additional;
         Usage = usageConfig;
+        RuntimePath = config.RuntimePath;
     }
 }

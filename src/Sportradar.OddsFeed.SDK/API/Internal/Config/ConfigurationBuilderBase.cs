@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Dawn;
 using Microsoft.Extensions.DependencyInjection;
 using Sportradar.OddsFeed.SDK.Api.Config;
@@ -111,6 +113,18 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
         }
 
         /// <summary>
+        /// Sets the runtime path used to store internal data
+        /// </summary>
+        /// <param name="path">The path to be set</param>
+        /// <returns>A <see cref="IConfigurationBuilder" /> derived instance used to set general configuration properties</returns>
+        /// <remarks>Use a path to that the application has write access</remarks>
+        public T SetRuntimePath(string path)
+        {
+            UofConfiguration.RuntimePath = path;
+            return this as T;
+        }
+
+        /// <summary>
         /// Specifies the producers which should be disabled (i.e. no recovery, ...)
         /// </summary>
         /// <param name="producerIds">The list of producer ids specifying the producers which should be disabled</param>
@@ -165,6 +179,18 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
             }
 
             var producers = ProducersProvider.GetProducers();
+            if (!string.IsNullOrEmpty(UofConfiguration.RuntimePath))
+            {
+                foreach (var producer in producers)
+                {
+                    ((Producer)producer).RuntimeFileName =
+                        Path.Combine(UofConfiguration.RuntimePath, $"{producer.Id}-{producer.Name}");
+                    if (!File.Exists(producer.RuntimeFileName)) continue;
+                    var latestTimestamp = File.GetLastWriteTime(producer.RuntimeFileName);
+                    ((Producer)producer).SetLastTimestampBeforeDisconnect(latestTimestamp);
+                }
+            }
+
             ((UofProducerConfiguration)UofConfiguration.Producer).Producers = producers.ToList();
         }
     }
