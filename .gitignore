@@ -66,3 +66,5 @@ dotCover.Output.*
 
 *.feature.cs
 **/Sportradar.OddsFeed.SDK.Tests.Acceptance/**/*.feature.cs
+
+.DS_Store

@@ -78,5 +78,10 @@ namespace Sportradar.OddsFeed.SDK.Api.Config
         /// Gets the settings for usage exporter
         /// </summary>
         IUofUsageConfiguration Usage { get; }
+
+        /// <summary>
+        /// Gets the path to store internal data
+        /// </summary>
+        string RuntimePath { get; }
     }
 }

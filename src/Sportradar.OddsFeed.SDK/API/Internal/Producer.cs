@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Dawn;
 using Microsoft.Extensions.Logging;
@@ -98,6 +99,11 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
         public IReadOnlyCollection<string> Scope { get; }
 
         /// <summary>
+        /// Get full name of the runtime file to store internals
+        /// </summary>
+        public string RuntimeFileName { get; internal set; }
+
+        /// <summary>
         /// Gets the recovery info about last recovery attempt
         /// </summary>
         /// <value>The recovery info about last recovery attempt</value>
@@ -181,6 +187,15 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal
             if (timestamp >= LastTimestampBeforeDisconnect)
             {
                 LastTimestampBeforeDisconnect = timestamp;
+                if (!string.IsNullOrEmpty(RuntimeFileName))
+                {
+                    if (!File.Exists(RuntimeFileName))
+                    {
+                        File.Create(RuntimeFileName);
+                    }
+
+                    File.SetLastWriteTime(RuntimeFileName, timestamp);
+                }
             }
             else if (timestamp < LastTimestampBeforeDisconnect.AddSeconds(-MaxInactivitySeconds))
             {

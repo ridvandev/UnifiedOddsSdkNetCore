@@ -110,6 +110,12 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
         public SdkEnvironment Environment => (SdkEnvironment)base["environment"];
 
         /// <summary>
+        /// Gets runtime path
+        /// </summary>
+        [ConfigurationProperty("runtimePath", IsRequired = false, DefaultValue = "")]
+        public string RuntimePath => (string)base["runtimePath"];
+
+        /// <summary>
         /// Retrieves the <see cref="UofConfigurationSection"/> from the app.config file
         /// </summary>
         /// <returns>The <see cref="UofConfigurationSection"/> instance loaded from config file</returns>
