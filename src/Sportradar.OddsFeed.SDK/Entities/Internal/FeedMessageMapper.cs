@@ -52,24 +52,36 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
         /// Maps (converts) the provided <see cref="alive"/> instance to the <see cref="IAlive"/> instance
         /// </summary>
         /// <param name="message">A <see cref="alive"/> instance to be mapped (converted)</param>
+        /// <param name="rawMessage">raw message from broker</param>
         /// <returns>A <see cref="IAlive"/> instance constructed from information in the provided <see cref="alive"/></returns>
-        public IAlive MapAlive(alive message)
+        public IAlive MapAlive(alive message, byte[] rawMessage)
         {
             _ = Guard.Argument(message, nameof(message)).NotNull();
 
-            return new Alive(new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt, SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product), message.subscribed != 0);
+            return new Alive(
+                new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt,
+                    SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product),
+                message.subscribed != 0,
+                rawMessage,
+                message.RoutingKey);
         }
 
         /// <summary>
         /// Maps (converts) the provided <see cref="snapshot_complete"/> instance to the <see cref="ISnapshotCompleted"/> instance
         /// </summary>
         /// <param name="message">A <see cref="snapshot_complete"/> instance to be mapped (converted)</param>
+        /// <param name="rawMessage">raw message from broker</param>
         /// <returns>A <see cref="ISnapshotCompleted"/> instance constructed from information in the provided <see cref="snapshot_complete"/></returns>
-        public ISnapshotCompleted MapSnapShotCompleted(snapshot_complete message)
+        public ISnapshotCompleted MapSnapShotCompleted(snapshot_complete message, byte[] rawMessage)
         {
             _ = Guard.Argument(message, nameof(message)).NotNull();
 
-            return new SnapshotCompleted(new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt, SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product), message.request_id);
+            return new SnapshotCompleted(
+                new MessageTimestamp(message.GeneratedAt, message.SentAt, message.ReceivedAt,
+                    SdkInfo.ToEpochTime(DateTime.Now)), _producerManager.GetProducer(message.product),
+                message.request_id,
+                rawMessage,
+                message.RoutingKey);
         }
 
         /// <summary>
@@ -92,7 +104,8 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                         MessageMapperHelper.GetEnumValue(message.change_typeSpecified, message.change_type, FixtureChangeType.Other, FixtureChangeType.NotAvailable),
                                         message.next_live_timeSpecified ? (long?)message.next_live_time : null,
                                         message.start_time,
-                                        rawMessage);
+                                        rawMessage,
+                                        message.RoutingKey);
         }
 
         /// <summary>
@@ -115,7 +128,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                   message.request_idSpecified ? (long?)message.request_id : null,
                                   MessageMapperHelper.GetEnumValue(message.market_statusSpecified, message.market_status, MarketStatus.Suspended),
                                   message.groups?.Split('|'),
-                                  rawMessage);
+                                  rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -143,7 +156,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                                                                               message.ProducerId,
                                                                                               message.SportId,
                                                                                               culturesList)),
-                                    rawMessage);
+                                    rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -173,7 +186,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                                                                                       message.ProducerId,
                                                                                                       message.SportId,
                                                                                                       culturesList)),
-                                            rawMessage);
+                                            rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -199,7 +212,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                                                                                          message.SportId,
                                                                                                          culturesList)),
                                         message.certainty,
-                                        rawMessage);
+                                        rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -220,7 +233,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                                 GetEventForMessage<T>(Urn.Parse(message.event_id), message.SportId, culturesList),
                                                 message.request_idSpecified ? (long?)message.request_id : null,
                                                 message.market.Select(m => _marketFactory.GetMarketCancel(GetEventForNameProvider<T>(Urn.Parse(message.event_id), message.SportId, culturesList), m, message.ProducerId, message.SportId, culturesList)),
-                                                rawMessage);
+                                                rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -250,7 +263,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                      markets,
                                      message.odds_generation_properties,
                                      _namedValuesProvider,
-                                     rawMessage);
+                                     rawMessage, message.RoutingKey);
         }
 
         /// <summary>
@@ -277,7 +290,7 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal
                                                message.odds?.betting_statusSpecified == true ? (int?)message.odds.betting_status : null,
                                                message.odds?.market?.Select(m => _marketFactory.GetMarketWithProbabilities(GetEventForNameProvider<T>(eventId, sportId, culturesList), m, message.product, sportId, culturesList)).ToList(),
                                                _namedValuesProvider,
-                                               rawMessage);
+                                               rawMessage, message.RoutingKey);
         }
 
         /// <summary>

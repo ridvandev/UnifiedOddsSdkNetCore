@@ -83,7 +83,8 @@ public abstract class CashOutProbabilitiesProviderTests : AutoMockerUnitTest
                                                  0,
                                                  null,
                                                  new Mock<INamedValuesProvider>().Object,
-                                                 Array.Empty<byte>());
+                                                 Array.Empty<byte>(),
+                                                 string.Empty);
 
         public WhenGetCashOutProbabilitiesIsSuccessful()
         {

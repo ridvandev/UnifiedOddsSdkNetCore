@@ -11,7 +11,7 @@ namespace Sportradar.OddsFeed.SDK.Api.EventArguments
     /// <summary>
     /// Event arguments for the alive event
     /// </summary>
-    internal class AliveEventArgs : EventArgs
+    public class AliveEventArgs : EventArgs
     {
         /// <summary>
         /// A <see cref="IFeedMessageMapper"/> used to map feed message to the one dispatched to the user
@@ -52,7 +52,7 @@ namespace Sportradar.OddsFeed.SDK.Api.EventArguments
         /// <returns>A <see cref="IAlive"/> representing the received <see cref="alive"/> message</returns>
         public IAlive GetAlive()
         {
-            return _messageMapper.MapAlive(_feedMessage);
+            return _messageMapper.MapAlive(_feedMessage, _rawMessage);
         }
     }
 }

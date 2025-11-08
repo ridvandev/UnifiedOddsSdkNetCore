@@ -14,8 +14,10 @@ namespace Sportradar.OddsFeed.SDK.Entities.Internal.EntitiesImpl
         /// <param name="timestamp">The value specifying timestamps related to the message (in the milliseconds since EPOCH UTC)</param>
         /// <param name="producer">The <see cref="IProducer" /> specifying the producer / service which dispatched the current <see cref="Message" /> message</param>
         /// <param name="requestId">the id of the request which triggered the current <see cref="SnapshotCompleted" /> message</param>
-        public SnapshotCompleted(IMessageTimestamp timestamp, IProducer producer, long requestId)
-            : base(timestamp, producer)
+        /// <param name="rawMessage">raw message from broker</param>
+        /// <param name="requestId">broker message routingKey</param>
+        public SnapshotCompleted(IMessageTimestamp timestamp, IProducer producer, long requestId, byte[] rawMessage, string routingKey)
+            : base(timestamp, producer, rawMessage, routingKey)
         {
             RequestId = requestId;
         }

@@ -62,7 +62,7 @@ namespace Sportradar.OddsFeed.SDK.Api.EventArguments
         /// <returns>A <see cref="ISnapshotCompleted"/> representing the received <see cref="snapshot_complete"/> message</returns>
         public ISnapshotCompleted GetSnapshotCompleted()
         {
-            return _messageMapper.MapSnapShotCompleted(_feedMessage);
+            return _messageMapper.MapSnapShotCompleted(_feedMessage, _rawMessage);
         }
 
         /// <summary>
