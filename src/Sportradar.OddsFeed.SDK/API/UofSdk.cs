@@ -360,6 +360,29 @@ namespace Sportradar.OddsFeed.SDK.Api
                     return services.BuildServiceProvider().GetRequiredService<IProducersProvider>();
                 });
         }
+        
+        /// <summary>
+        /// Constructs a <see cref="IUofConfiguration"/> instance from provided information, using a custom <see cref="IUofConfigurationSectionProvider"/>
+        /// </summary>
+        /// <param name="configurationSectionProvider">The custom configuration section provider to use instead of the default app-config based one</param>
+        /// <returns>A <see cref="IUofConfiguration"/> instance created from provided information</returns>
+        public static ITokenSetter GetConfigurationBuilder(IUofConfigurationSectionProvider configurationSectionProvider)
+        {
+            return new TokenSetter(
+                configurationSectionProvider,
+                config =>
+                {
+                    var services = new ServiceCollection();
+                    services.AddUofSdkServices(config);
+                    return services.BuildServiceProvider().GetRequiredService<IBookmakerDetailsProvider>();
+                },
+                config =>
+                {
+                    var services = new ServiceCollection();
+                    services.AddUofSdkServices(config);
+                    return services.BuildServiceProvider().GetRequiredService<IProducersProvider>();
+                });
+        }
 
         /// <summary>
         /// Constructs and returns a new instance of <see cref="IUofSessionBuilder"/>

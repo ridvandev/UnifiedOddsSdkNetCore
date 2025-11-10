@@ -10374,6 +10374,13 @@
             </summary>
             <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Api.Config.IUofConfiguration"/> instance created from provided information</returns>
         </member>
+        <member name="M:Sportradar.OddsFeed.SDK.Api.UofSdk.GetConfigurationBuilder(Sportradar.OddsFeed.SDK.Api.Internal.Config.IUofConfigurationSectionProvider)">
+            <summary>
+            Constructs a <see cref="T:Sportradar.OddsFeed.SDK.Api.Config.IUofConfiguration"/> instance from provided information, using a custom <see cref="T:Sportradar.OddsFeed.SDK.Api.Internal.Config.IUofConfigurationSectionProvider"/>
+            </summary>
+            <param name="configurationSectionProvider">The custom configuration section provider to use instead of the default app-config based one</param>
+            <returns>A <see cref="T:Sportradar.OddsFeed.SDK.Api.Config.IUofConfiguration"/> instance created from provided information</returns>
+        </member>
         <member name="M:Sportradar.OddsFeed.SDK.Api.UofSdk.GetSessionBuilder">
             <summary>
             Constructs and returns a new instance of <see cref="T:Sportradar.OddsFeed.SDK.Api.IUofSessionBuilder"/>

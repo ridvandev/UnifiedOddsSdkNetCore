@@ -4,7 +4,7 @@ using Sportradar.OddsFeed.SDK.Common.Enums;
 
 namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
 {
-    internal interface IUofConfigurationSection
+    public interface IUofConfigurationSection
     {
         /// <summary>
         /// Gets the access token
