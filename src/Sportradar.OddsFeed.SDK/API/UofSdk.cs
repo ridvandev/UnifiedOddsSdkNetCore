@@ -345,6 +345,16 @@ namespace Sportradar.OddsFeed.SDK.Api
         {
             return new TokenSetter(new UofConfigurationSectionProvider(), null, null);
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configurationSectionProvider"></param>
+        /// <returns></returns>
+        public static ITokenSetter GetConfigurationBuilder(IUofConfigurationSectionProvider configurationSectionProvider)
+        {
+            return new TokenSetter(configurationSectionProvider, null, null);
+        }
 
         /// <summary>
         /// Constructs and returns a new instance of <see cref="IUofSessionBuilder"/>

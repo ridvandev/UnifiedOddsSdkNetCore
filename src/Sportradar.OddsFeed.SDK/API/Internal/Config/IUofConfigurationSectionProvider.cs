@@ -1,4 +1,4 @@
-// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
+﻿// Copyright (C) Sportradar AG.See LICENSE for full license governing this code
 
 using System;
 using System.Configuration;
@@ -8,7 +8,7 @@ namespace Sportradar.OddsFeed.SDK.Api.Internal.Config
     /// <summary>
     /// Represents a contract implemented by classes used to provide access to <see cref="IUofConfigurationSection"/> instance
     /// </summary>
-    internal interface IUofConfigurationSectionProvider
+    public interface IUofConfigurationSectionProvider
     {
         /// <summary>
         /// Gets the <see cref="IUofConfigurationSection"/>
